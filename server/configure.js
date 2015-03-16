@@ -1,6 +1,5 @@
 //To keep the server lighweight we'll make a configure module
 //that takes the app and then returns the app with all the config set up
-
 var path = require('path');
 var routes = require('../routes');
 var favicon = require('serve-favicon');

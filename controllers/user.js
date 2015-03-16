@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var User = require('../models').User,
     mongoose = require('mongoose');
 
@@ -43,14 +44,36 @@ var user = {
     });
   },
   update: function(req,res) {
+    // if (req.params.username) {
+    //   User.findOneAndUpdate({ username: req.params.username}, req.body, {}, function(err, user){
+    //     if (err) { throw err;}
+    //     res.json({
+    //     'message': 'User succesfully updated',
+    //     'user': user
+    //     })
+    //   })
+    // }
     if (req.params.username) {
-      User.findOneAndUpdate({ username: req.params.username}, req.body, {}, function(err, user){
-        if (err) { throw err;}
-        res.json({
-        'message': 'User succesfully updated',
-        'user': user
-        })
-      })
+      User.findOne({ username: req.params.username}, function(err, user){
+        if (err) { throw err;};
+
+        if (!req.body.role) {
+          _.extend(user, req.body);
+        } else if (req.user.role == 'admin') {
+          _.extend(user, req.body);
+        } else {
+          return res.json({ message: 'Only an admin can change your role, please remove the role parameter from the req'});
+        }
+
+        user.save(function(err, user){
+          if (err) { throw err;};
+
+          res.json({
+            'message': 'User succesfully updated',
+            'user': user
+          });
+        });
+      });
     }
   },
   remove: function(req, res) {
