@@ -44,26 +44,13 @@ var user = {
     });
   },
   update: function(req,res) {
-    // if (req.params.username) {
-    //   User.findOneAndUpdate({ username: req.params.username}, req.body, {}, function(err, user){
-    //     if (err) { throw err;}
-    //     res.json({
-    //     'message': 'User succesfully updated',
-    //     'user': user
-    //     })
-    //   })
-    // }
+    //use traditional find method so save is called, therefore the pre save hook is called
     if (req.params.username) {
       User.findOne({ username: req.params.username}, function(err, user){
         if (err) { throw err;};
 
-        if (!req.body.role) {
-          _.extend(user, req.body);
-        } else if (req.user.role == 'admin') {
-          _.extend(user, req.body);
-        } else {
-          return res.json({ message: 'Only an admin can change your role, please remove the role parameter from the req'});
-        }
+
+        _.extend(user, req.body);
 
         user.save(function(err, user){
           if (err) { throw err;};
@@ -78,7 +65,6 @@ var user = {
   },
   remove: function(req, res) {
     if (req.params.username) {
-      if (req.user.role != 'admin') { return res.json(401, {message: 'You need admin privaledges'})};
       User.findOneAndRemove({ username: req.params.username }, function(err, user){
         res.json('User: ' + req.params.username + ' has been removed');
       });

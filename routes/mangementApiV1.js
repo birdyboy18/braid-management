@@ -10,10 +10,10 @@ router.get('/', function(req,res){
 });
 
 //User routes
-router.get('/user/', auth.isAuthenticated, auth.restrictTo('admin'), user.list);
+router.get('/user/', auth.isAuthenticated, auth.isAuthorized(), user.list);
 router.post('/user/', user.create);
-router.put('/user/:username', auth.isAuthenticated, auth.restrictToSelf(), user.update);
-router.delete('/user/:username', auth.isAuthenticated, auth.restrictTo('admin'), user.remove);
+router.put('/user/:username', auth.isAuthenticated, auth.isAuthorized(), user.update);
+router.delete('/user/:username', auth.isAuthenticated, auth.isAuthorized(), user.remove);
 
 
 module.exports = router;
