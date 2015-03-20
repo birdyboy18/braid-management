@@ -3,11 +3,11 @@ var mongoose = require('mongoose'),
 
 var modifier = new Schema({
   _id: Schema.Types.ObjectId,
-  _userId: Schema.Types.ObjectId,
+  _userId: String,
   type: String,
   name: String,
   description: String,
   threads: [{ type: Schema.Types.ObjectId, ref: 'Thread'}]
 });
 
-module.export = mongoose.model('Modifier', modifier);
+module.exports = mongoose.model('Modifier', modifier);

@@ -4,10 +4,10 @@ var User = require('../models').User,
 
 var user = {
   list: function(req,res) {
-    User.find({},'-__v',{}).exec(function(err, users){
+    User.find({},'-__v -password',{}).exec(function(err, users){
       if (err) { throw err;}
 
-      res.json(200,users);
+      res.status(200).json(users);
     });
   },
   create: function(req,res) {
@@ -46,7 +46,7 @@ var user = {
   update: function(req,res) {
     //use traditional find method so save is called, therefore the pre save hook is called
     if (req.params.username) {
-      User.findOne({ username: req.params.username}, function(err, user){
+      User.findOne({ username: req.params.username},'-__v -password', function(err, user){
         if (err) { throw err;};
 
 
@@ -65,7 +65,7 @@ var user = {
   },
   remove: function(req, res) {
     if (req.params.username) {
-      User.findOneAndRemove({ username: req.params.username }, function(err, user){
+      User.findOneAndRemove({ username: req.params.username }, function(err){
         res.json('User: ' + req.params.username + ' has been removed');
       });
     }
