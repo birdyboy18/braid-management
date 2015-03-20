@@ -1,9 +1,9 @@
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
-var User = require('../models/user');
+var Models = require('../models/');
 
 passport.use(new BasicStrategy(function(username, password, cb) {
-  User.findOne({ username: username}, function(err, user){
+  Models.User.findOne({ username: username}, function(err, user){
     if (err) {return cb(err)};
 
     //if we didn't find a user with that username
@@ -28,7 +28,7 @@ var auth = {
       if (req.user.role == role) {
         next();
       } else {
-        next(res.json(401, {message: 'You need admin priveleges'}));
+        next(res.json(403, {message: 'You need admin priveleges'}));
       }
     }
   },
@@ -39,7 +39,7 @@ var auth = {
       } else if (req.user.role == 'admin') {
         next();
       } else {
-        next(res.json(401, {message: 'You need admin priveleges or to be the owner of this account'}));
+        next(res.json(403, {message: 'You need admin priveleges or to be the owner of this account'}));
       }
     }
   },
@@ -60,7 +60,7 @@ var auth = {
       } else if (req.user.role == 'admin') {
         next();
       } else {
-        next(res.json(401, {message: 'You need admin priveleges or to be the owner of this account'}));
+        next(res.json(403, {message: 'You need admin priveleges or to be the owner of this account'}));
       }
     }
   }

@@ -4,10 +4,10 @@ var User = require('../models').User,
 
 var user = {
   list: function(req,res) {
-    User.find({},'-__v',{}, function(err, users){
+    User.find({},'-__v',{}).exec(function(err, users){
       if (err) { throw err;}
 
-      res.json(users);
+      res.json(200,users);
     });
   },
   create: function(req,res) {

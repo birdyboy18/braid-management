@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 var braid = new Schema({
   _id: Schema.Types.ObjectId,
-  _userId: Schema.Types.ObjectId,
+  _userId: String,
   name: String,
   description: String,
   last_modified: { type: Date, default: Date.now },
