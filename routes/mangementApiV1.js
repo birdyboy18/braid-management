@@ -20,20 +20,20 @@ router.delete('/user/:username', auth.isAuthenticated, auth.isAuthorized(), user
 
 //Braid Routes
 router.get('/braids/', auth.isAuthenticated, auth.isAuthorized(), braid.list);
-router.post('/:username/braid/', auth.isAuthenticated, auth.isAuthorized(), braid.create);
-router.put('/:username/braid/:braid_id', auth.isAuthenticated, auth.isAuthorized(), braid.update);
-router.delete('/:username/braid/:braid_id', auth.isAuthenticated, auth.isAuthorized(), braid.remove);
+router.post('/braid/', auth.isAuthenticated, auth.isAuthorized(), braid.create);
+router.put('/braid/:braid_id', auth.isAuthenticated, auth.isAuthorized(), braid.update);
+router.delete('/braid/:braid_id', auth.isAuthenticated, auth.isAuthorized(), braid.remove);
 
 //Modifier Routes
 router.get('/modifiers/', auth.isAuthenticated, auth.isAuthorized(), modifier.list);
-router.post('/:username/modifier/', auth.isAuthenticated, auth.isAuthorized(), modifier.create);
-router.put('/:username/modifier/:modifier_id', auth.isAuthenticated, auth.isAuthorized(), modifier.update);
-router.delete('/:username/modifier/:modifier_id', auth.isAuthenticated, auth.isAuthorized(), modifier.remove);
+router.post('/modifier/', auth.isAuthenticated, auth.isAuthorized(), modifier.create);
+router.put('/modifier/:modifier_id', auth.isAuthenticated, auth.isAuthorized(), modifier.update);
+router.delete('/modifier/:modifier_id', auth.isAuthenticated, auth.isAuthorized(), modifier.remove);
 
 //Thread Routes
 router.get('/threads/', auth.isAuthenticated, auth.isAuthorized(), thread.list);
-router.post('/:username/braid/:braid_id/thread/', auth.isAuthenticated, auth.isAuthorized(), thread.create);
-router.put('/:username/braid/:braid_id/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.update);
-router.delete('/:username/braid/:braid_id/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.remove);
+router.post('/thread/', auth.isAuthenticated, auth.isAuthorized(), thread.create);
+router.put('/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.update);
+router.delete('/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.remove);
 
 module.exports = router;

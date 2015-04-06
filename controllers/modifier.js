@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var Models = require('../models'),
     mongoose = require('mongoose');
 
@@ -17,9 +17,17 @@ var modifier = {
     });
   },
   create: function(req, res) {
+    //check if there is a username query parameter. if there is use that one to create a new braid not the authenticated user.
+    var userId;
+    if (req.query.userId) {
+      userId = req.query.userId;
+    } else {
+      userId = req.user.username;
+    }
+
     var newModifier = new Models.Modifier({
       _id: new mongoose.Types.ObjectId,
-      _userId: req.params.username,
+      _userId: userId,
       type: req.body.type,
       name: req.body.name,
       description: req.body.description
@@ -28,7 +36,7 @@ var modifier = {
     newModifier.save(function(err, mod){
       if (err) { throw err;};
 
-      Models.User.findOne({ username: req.params.username }, function(err, user){
+      Models.User.findOne({ username: mod._userId }, function(err, user){
         if (err) { throw err;};
 
 
@@ -45,7 +53,7 @@ var modifier = {
     });
   },
   update: function(req, res) {
-    Models.Modifier.findOneAndUpdate({ _id: req.params.modifier_id }, req.body, function(err, mod){
+    Models.Modifier.findOneAndUpdate({ _id: req.modId }, req.body, function(err, mod){
       if (err) { throw err;};
 
       res.json({

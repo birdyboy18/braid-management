@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var Models = require('../models'),
     mongoose = require('mongoose');
 
@@ -16,10 +16,25 @@ var thread = {
     });
   },
   create: function(req, res) {
+    //check if there is a username query parameter. if there is use that one to create a new braid not the authenticated user.
+    var userId;
+    if (req.query.userId) {
+      userId = req.query.userId;
+    } else {
+      userId = req.user.username;
+    }
+
+    var braidId;
+    if (req.query.braidId) {
+      braidId = req.query.braidId;
+    } else {
+      return res.json('You haven\'t supplied a braidId to assign the new thread too');
+    }
+
     var newThread = new Models.Thread({
       _id: new mongoose.Types.ObjectId,
-      _braidId: req.params.braid_id,
-      _userId: req.params.username,
+      _braidId: braidId,
+      _userId: userId,
       service: req.body.service,
       name: req.body.name,
       description: req.body.description
@@ -28,7 +43,7 @@ var thread = {
     newThread.save(function(err, thread){
       if (err) { throw err;};
 
-      Models.Braid.findOne({ _id: req.params.braid_id }, function(err, braid){
+      Models.Braid.findOne({ _id: braidId }, function(err, braid){
         if (err) { throw err;};
 
         braid.threads.push(thread._id);
@@ -46,7 +61,7 @@ var thread = {
     });
   },
   update: function(req, res) {
-    Models.Thread.findOneAndUpdate({ username: req.params.thread_id }, req.body, function(err, thread){
+    Models.Thread.findOneAndUpdate({ _id: req.params.thread_id }, req.body, function(err, thread){
       if (err) { throw err;};
 
       res.json({
@@ -57,6 +72,13 @@ var thread = {
     });
   },
   remove: function(req, res) {
+    var userId;
+    if (req.query.userId) {
+      userId = req.query.userId;
+    } else {
+      userId = req.user.username;
+    }
+
     Models.Thread.findOne({ _id: req.params.thread_id }, function(err, thread){
       if (err) { throw err;};
 
