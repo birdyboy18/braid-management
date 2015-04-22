@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Models = require('../models'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    Service = require('../helpers/service.js');
 
 
 var thread = {
@@ -31,13 +32,16 @@ var thread = {
       return res.json('You haven\'t supplied a braidId to assign the new thread too');
     }
 
+    var service_meta = Service.serviceDecider(req.body.service, req.body.username);
+
     var newThread = new Models.Thread({
       _id: new mongoose.Types.ObjectId,
       _braidId: braidId,
       _userId: userId,
       service: req.body.service,
       name: req.body.name,
-      description: req.body.description
+      description: req.body.description,
+      service_meta: service_meta
     });
 
     newThread.save(function(err, thread){

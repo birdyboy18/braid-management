@@ -45,9 +45,8 @@ var youtube = new Schema({
       width: { type: Number},
       height: { type: Number}
       },
-    },
-  }
-});
+    }
+  });
 
 module.exports = {
   YoutubeMeta: mongoose.model('YoutubeMeta', youtubeMeta),

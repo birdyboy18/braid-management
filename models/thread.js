@@ -6,13 +6,14 @@ var thread = new Schema({
   _braidId: Schema.Types.ObjectId,
   _userId: String,
   active: { type: Boolean, default: false},
-  service: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
   poll_time: { type: Number, default: 15 },
   last_checked: {type: Date, default: Date.now },
   entries: [Schema.Types.ObjectId],
-  modifiers: [Schema.Types.ObjectId]
+  modifiers: [Schema.Types.ObjectId],
+  service: { type: String, required: true },
+  service_meta: { type: Schema.Types.Mixed }
 });
 
 /*
