@@ -36,4 +36,6 @@ router.post('/thread/', auth.isAuthenticated, auth.isAuthorized(), thread.create
 router.put('/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.update);
 router.delete('/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.remove);
 
+router.get('/thread/:thread_id/entries', auth.isAuthenticated, auth.isAuthorized(), thread.listEntries);
+
 module.exports = router;

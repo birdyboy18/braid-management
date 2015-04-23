@@ -1,12 +1,14 @@
 var _ = require('lodash');
 var Models = require('../models'),
     mongoose = require('mongoose'),
-    Service = require('../helpers/service.js');
+    Service = require('../helpers/service.js'),
+    events = require('events'),
+    AppEmitter = require('../actions/app-actions.js');
 
 
 var thread = {
   list: function(req, res) {
-    Models.Thread.find({},{},{}, function(err, threads){
+    Models.Thread.find({}).exec(function(err, threads){
       if (threads.length > 0) {
         res.json(threads);
       } else {
@@ -41,7 +43,8 @@ var thread = {
       service: req.body.service,
       name: req.body.name,
       description: req.body.description,
-      service_meta: service_meta
+      service_meta: service_meta,
+      active: req.body.name || false
     });
 
     newThread.save(function(err, thread){
@@ -55,6 +58,8 @@ var thread = {
         braid.save(function(err, braid){
           if (err) { throw err;};
 
+          //Emit and event so that the scrape knows it needs to scrape.
+          AppEmitter.emitChange('threadCreated', thread);
           res.status(201).json({
             'message': 'Thread sucessfully created and reference has been added to braid',
             'braid': braid,
@@ -105,6 +110,7 @@ var thread = {
             Models.Thread.remove({ _id: thread._id}, function(err){
               if (err) {throw err;};
 
+              AppEmitter.emitChange('threadRemoved', thread);
               res.status(200).json({
                 'message': 'Sucessfully deleted thread, reference has been removed from braid',
                 'braid': braid
@@ -114,6 +120,13 @@ var thread = {
 
         });
       }
+    });
+  },
+  listEntries: function(req, res) {
+    Models.Entry.find({ _threadId: req.params.thread_id}, function(err, entries){
+      if (err) { throw err;};
+
+      res.status(200).json(entries);
     });
   }
 }

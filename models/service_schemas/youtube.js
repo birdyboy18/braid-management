@@ -21,29 +21,29 @@ var youtube = new Schema({
   description: { type: String},
   thumbnails: {
     default: {
-      url: {type: String},
-      width: { type: Number},
-      height: { type: Number}
+      url: {type: String, default: ''},
+      width: { type: Number, default: ''},
+      height: { type: Number, default: ''}
       },
     medium: {
-      url: {type: String},
-      width: { type: Number},
-      height: { type: Number}
+      url: {type: String, default: ''},
+      width: { type: Number, default: ''},
+      height: { type: Number, default: ''}
       },
     high: {
-      url: {type: String},
-      width: { type: Number},
-      height: { type: Number}
+      url: {type: String, default: ''},
+      width: { type: Number, default: ''},
+      height: { type: Number, default: ''}
       },
     standard: {
-      url: {type: String},
-      width: { type: Number},
-      height: { type: Number}
+      url: {type: String, default: ''},
+      width: { type: Number, default: ''},
+      height: { type: Number, default: ''}
       },
     maxres: {
-      url: {type: String},
-      width: { type: Number},
-      height: { type: Number}
+      url: {type: String, default: ''},
+      width: { type: Number, default: ''},
+      height: { type: Number, default: ''}
       },
     }
   });

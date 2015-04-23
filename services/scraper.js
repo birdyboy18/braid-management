@@ -6,6 +6,8 @@ var Models = require('../models');
 var request = require('request');
 var config = require('../config.js');
 var ServiceModels = require('../models/service_schemas');
+var AppEmitter = require('../actions/app-actions.js');
+var _ = require('lodash');
 
 module.exports = function() {
   var scraper = {}
@@ -17,7 +19,6 @@ module.exports = function() {
       if (err) { throw err;};
 
       threads.map(function(thread){
-        if (thread.active) {
           scraper.threads.push({
             _id: thread._id,
             name: thread.name,
@@ -25,13 +26,35 @@ module.exports = function() {
             modifiers: thread.modifiers,
             poll_time: thread.poll_time,
             last_checked: thread.last_checked,
-            service_meta: thread.service_meta
+            service_meta: thread.service_meta,
+            active: thread.active
           });
-        }
         cb(scraper.threads);
       });
 
     });
+  },
+
+  scraper.threadNeedsScraping = function(thread) {
+    var min = 1000*60;
+    var now = new Date();
+    var timeSinceChecked = Math.ceil((now.getTime() - thread.last_checked.getTime())/min);
+
+    if (timeSinceChecked > 1 && thread.active === true) {
+      console.log("needs to be scraped, last scraped was " + timeSinceChecked + " mins ago");
+      return true;
+    } else {
+      console.log('None need scraping all up-to-date: last checked - ' + timeSinceChecked + " mins ago");
+      return false;
+    }
+  },
+
+  scraper.addThread = function(thread) {
+    console.log("A thread was added:" + thread._id);
+  },
+
+  scraper.removeThread = function(thread) {
+    console.log("A thread was removed:" + thread._id);
   },
 
   scraper.scrapeThread = function(thread) {
@@ -50,15 +73,24 @@ module.exports = function() {
       request.get(playlistItemsUrl, function(err, req, body) {
         if (err) { throw err;};
         var data = JSON.parse(body);
-        // console.log(data.items);
 
         data.items.map(function(result){
           Models.Entry.find({ id: result.id }, function(err, entries) {
-            if (entries > 0) {
+            if (entries.length > 0) {
               //it exists so don't add the same one again silly.
-              console.log("Entry already is in database");
+              Models.Thread.findOne({ _id: thread._id }, function(err, thread){
+                if (err) { throw err;};
+
+                thread.last_checked = new Date();
+
+                thread.save(function(err, thread){
+                  if (err) { throw err;};
+                })
+              })
             } else {
               //Lets add the new ones in!
+              //we seem to be having problems with properties not being defined. Let lodash do the work for you
+              var thumbnails = _.assign({}, result.snippet.thumbnails);
               var youtubeEntry = new ServiceModels.YouTube.YouTube({
                 id: result.id,
                 videoId: result.snippet.resourceId.videoId,
@@ -68,33 +100,7 @@ module.exports = function() {
                 playlistId: result.playlistID,
                 title: result.snippet.title,
                 description: result.snippet.description,
-                thumbnails: {
-                  default: {
-                    url: result.snippet.thumbnails.default.url,
-                    width: result.snippet.thumbnails.default.width,
-                    height: result.snippet.thumbnails.default.height
-                  },
-                  medium: {
-                    url: result.snippet.thumbnails.medium.url,
-                    width: result.snippet.thumbnails.medium.width,
-                    height: result.snippet.thumbnails.medium.height
-                  },
-                  high: {
-                    url: result.snippet.thumbnails.high.url,
-                    width: result.snippet.thumbnails.high.width,
-                    height: result.snippet.thumbnails.high.height
-                  },
-                  standard: {
-                    url: result.snippet.thumbnails.standard.url,
-                    width: result.snippet.thumbnails.standard.width,
-                    height: result.snippet.thumbnails.standard.height
-                  }
-                  // maxres: {
-                  //   url: result.snippet.thumbnails.maxres.url || '',
-                  //   width: result.snippet.thumbnails.maxres.width || '',
-                  //   height: result.snippet.thumbnails.maxres.height || ''
-                  // }
-                }
+                thumbnails: thumbnails
               });
 
               var newEntry = new Models.Entry({
@@ -107,8 +113,13 @@ module.exports = function() {
               newEntry.save(function(err, entry){
                 if (err) { throw err;};
 
-                Models.Thread.findOneAndUpdate({ _id: thread._id },{ last_checked: new Date()}, function(err, thread){
-                  console.log('New entry succesfully added');
+                Models.Thread.findOne({ _id: thread._id }, function(err, thread){
+                  thread.last_checked = new Date();
+                  thread.entries.push(entry._id);
+
+                  thread.save(function(err, thread){
+                    console.log('New entry succesfully added');
+                  });
                 });
 
               });
@@ -124,18 +135,15 @@ module.exports = function() {
   scraper.start = function() {
     scraper.getThreads(function(threads){
       threads.map(function(thread){
-        var min = 1000*60;
-        var now = new Date();
-        var timeSinceChecked = Math.ceil((now.getTime() - thread.last_checked.getTime())/min);
-
-        if (timeSinceChecked > thread.poll_time) {
-          console.log("needs to be scraped, last scraped was " + timeSinceChecked + " mins ago");
+        if (scraper.threadNeedsScraping(thread) === true) {
           scraper.scrapeThread(thread);
-        } else {
-          console.log('None need scraping all up-to-date');
         }
       });
     });
+
+    //Set up the scraper to listen for events when threads are created and deleted
+    AppEmitter.addListener('threadCreated', scraper.addThread);
+    AppEmitter.addListener('threadRemoved', scraper.removeThread);
   }
 
   return scraper;

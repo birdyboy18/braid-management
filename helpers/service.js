@@ -5,7 +5,7 @@ var service = {
     if (service === 'youtube') {
       var service_meta = new Service.YouTube.YoutubeMeta({
         channel_username: username
-      });
+      }, { _id: false });
       return service_meta;
     }
   }
