@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var Scraper = require('../services/scraper.js')();
 
 module.exports = function(app) {
   app.use(logger('dev'));
@@ -29,6 +30,8 @@ module.exports = function(app) {
 
     console.log("Succesfully connected to database");
   });
+
+  Scraper.start();
 
   if ('development' === app.get('env')) {
     app.use(errorHandler());

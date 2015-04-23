@@ -1,3 +1,4 @@
 node_modules
 data/db
 data/log
+config.js

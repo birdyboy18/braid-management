@@ -50,5 +50,5 @@ var youtube = new Schema({
 
 module.exports = {
   YoutubeMeta: mongoose.model('YoutubeMeta', youtubeMeta),
-  YouTube: mongoose.model('Youtube', youtube)
+  YouTube: mongoose.model('YouTube', youtube)
 }
