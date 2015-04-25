@@ -3,7 +3,7 @@ var Models = require('../models'),
     mongoose = require('mongoose'),
     Service = require('../helpers/service.js'),
     events = require('events'),
-    AppEmitter = require('../actions/app-actions.js');
+    AppEmitter = require('../actions/app-emitter.js');
 
 
 var thread = {
@@ -59,7 +59,7 @@ var thread = {
           if (err) { throw err;};
 
           //Emit and event so that the scrape knows it needs to scrape.
-          AppEmitter.emitChange('threadCreated', thread);
+          AppEmitter.emitChange('threadChange');
           res.status(201).json({
             'message': 'Thread sucessfully created and reference has been added to braid',
             'braid': braid,
@@ -107,10 +107,15 @@ var thread = {
           braid.save(function(err, braid){
             if (err) { throw err;};
 
+            //Remove all the entries from the thread
+            Models.Entry.remove({ _threadId: thread._id }, function(err){
+              if (err) { throw err; };
+            })
+
             Models.Thread.remove({ _id: thread._id}, function(err){
               if (err) {throw err;};
 
-              AppEmitter.emitChange('threadRemoved', thread);
+              AppEmitter.emitChange('threadChange');
               res.status(200).json({
                 'message': 'Sucessfully deleted thread, reference has been removed from braid',
                 'braid': braid

@@ -29,9 +29,8 @@ module.exports = function(app) {
     if (err) throw err;
 
     console.log("Succesfully connected to database");
+    Scraper.start();
   });
-
-  Scraper.start();
 
   if ('development' === app.get('env')) {
     app.use(errorHandler());

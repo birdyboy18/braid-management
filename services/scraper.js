@@ -6,7 +6,7 @@ var Models = require('../models');
 var request = require('request');
 var config = require('../config.js');
 var ServiceModels = require('../models/service_schemas');
-var AppEmitter = require('../actions/app-actions.js');
+var AppEmitter = require('../actions/app-emitter.js');
 var _ = require('lodash');
 
 module.exports = function() {
@@ -17,9 +17,9 @@ module.exports = function() {
   scraper.getThreads = function(cb) {
     Models.Thread.find({},{},{}, function(err, threads){
       if (err) { throw err;};
-
+      var Threads = [];
       threads.map(function(thread){
-          scraper.threads.push({
+          Threads.push({
             _id: thread._id,
             name: thread.name,
             service: thread.service,
@@ -29,9 +29,8 @@ module.exports = function() {
             service_meta: thread.service_meta,
             active: thread.active
           });
-        cb(scraper.threads);
       });
-
+      cb(Threads);
     });
   },
 
@@ -49,12 +48,12 @@ module.exports = function() {
     }
   },
 
-  scraper.addThread = function(thread) {
-    console.log("A thread was added:" + thread._id);
-  },
-
-  scraper.removeThread = function(thread) {
-    console.log("A thread was removed:" + thread._id);
+  scraper.scrapeThreads = function(threads) {
+    threads.map(function(thread){
+      if (scraper.threadNeedsScraping(thread) === true) {
+        scraper.scrapeThread(thread);
+      }
+    });
   },
 
   scraper.scrapeThread = function(thread) {
@@ -118,7 +117,7 @@ module.exports = function() {
                   thread.entries.push(entry._id);
 
                   thread.save(function(err, thread){
-                    console.log('New entry succesfully added');
+                    console.log('New entry succesfully added: ' + entry.data.title);
                   });
                 });
 
@@ -134,16 +133,23 @@ module.exports = function() {
 
   scraper.start = function() {
     scraper.getThreads(function(threads){
-      threads.map(function(thread){
-        if (scraper.threadNeedsScraping(thread) === true) {
-          scraper.scrapeThread(thread);
-        }
+      scraper.threads = threads;
+      console.log("before change: " + scraper.threads);
+      scraper.scrapeThreads(scraper.threads);
+    })
+
+
+    /*
+    Set up the scraper to listen for events when threads are created and deleted,
+    simply update the scraper.threads from the database, then re-scrape
+    */
+    AppEmitter.addListener('threadChange', function(){
+      scraper.getThreads(function(threads) {
+        scraper.threads = threads;
+        console.log("after change: " + scraper.threads);
+        scraper.scrapeThreads(scraper.threads);
       });
     });
-
-    //Set up the scraper to listen for events when threads are created and deleted
-    AppEmitter.addListener('threadCreated', scraper.addThread);
-    AppEmitter.addListener('threadRemoved', scraper.removeThread);
   }
 
   return scraper;
