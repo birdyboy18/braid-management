@@ -133,6 +133,74 @@ var thread = {
 
       res.status(200).json(entries);
     });
+  },
+  attachModifier: function(req, res) {
+      Models.Thread.findOne({ _id: req.params.thread_id }, function(err, thread) {
+        if (err) { throw err;};
+
+        if (thread) {
+        //Look up to see that modifier actually exists
+        Models.Modifier.findOne({ _id: req.params.mod_id }, function(err, mod) {
+          if (err) { throw err;};
+
+          if (mod) {
+            //then it exists
+            thread.modifiers.push(mod._id);
+            mod.threads.push(thread._id);
+
+            mod.save();
+            thread.save();
+            res.status(200).json({
+              'message': 'Modifier has been sucessfully attached to the thread',
+              modifier: mod,
+              thread: thread
+            })
+          } else {
+            res.status(404).json({
+              'message': 'Sorry we couldn\'t attach that modifier because it doesn\'t exists, please make sure the Modifier ID is correct'
+            });
+          }
+        });
+    } else {
+      res.status(404).json({
+        'message': 'We couldn\'t find that thread please make sure the thread ID is correct'
+      });
+    }
+  });
+  },
+  removeModifier: function(req, res) {
+      Models.Thread.findOne({ _id: req.params.thread_id }, function(err, thread) {
+        if (err) { throw err;};
+
+        if (thread) {
+        //Look up to see that modifier actually exists
+        Models.Modifier.findOne({ _id: req.params.mod_id }, function(err, mod) {
+          if (err) { throw err;};
+
+          if (mod) {
+            //then it exists
+            thread.modifiers.pull(mod._id);
+            mod.threads.pull(thread._id);
+
+            mod.save();
+            thread.save();
+            res.status(200).json({
+              'message': 'Modifier has been sucessfully removed from the thread',
+              modifier: mod,
+              thread: thread
+            })
+          } else {
+            res.status(404).json({
+              'message': 'Sorry we couldn\'t remove that modifier because it doesn\'t exists, please make sure the Modifier ID is correct'
+            });
+          }
+        });
+    } else {
+      res.status(404).json({
+        'message': 'We couldn\'t find that thread please make sure the thread ID is correct'
+      });
+    }
+  });
   }
 }
 

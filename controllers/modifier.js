@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Models = require('../models'),
     mongoose = require('mongoose');
+    Modifier = require('../helpers/modifier.js');
 
 var modifier = {
   list: function(req, res) {
@@ -25,12 +26,15 @@ var modifier = {
       userId = req.user.username;
     }
 
+    var modifier_meta = Modifier.modifierDecider(req.body.type, req.body);
+
     var newModifier = new Models.Modifier({
       _id: new mongoose.Types.ObjectId,
       _userId: userId,
       type: req.body.type,
       name: req.body.name,
-      description: req.body.description
+      description: req.body.description,
+      modifier_meta: modifier_meta
     });
 
     newModifier.save(function(err, mod){

@@ -38,4 +38,11 @@ router.delete('/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), t
 
 router.get('/thread/:thread_id/entries', auth.isAuthenticated, auth.isAuthorized(), thread.listEntries);
 
+/*
+Modifier to threads routes, use this to attach modifiers to threads, the system will work out the rest.
+Only needs to be a put request because we are updating the thread, the application will know what to do after.
+*/
+router.put('/attach/modifier/:mod_id/to/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.attachModifier);
+router.put('/remove/modifier/:mod_id/from/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.removeModifier);
+
 module.exports = router;
