@@ -4,6 +4,7 @@ var Models = require('../models'),
     Service = require('../helpers/service.js'),
     events = require('events'),
     AppEmitter = require('../actions/app-emitter.js');
+    EntryModifier = require('../services/entry-modifier.js');
 
 
 var thread = {
@@ -149,7 +150,11 @@ var thread = {
             mod.threads.push(thread._id);
 
             mod.save();
-            thread.save();
+            thread.save(function(err, thread){
+              if (err) { throw err;};
+
+              EntryModifier.applyModifiers(thread, mod);
+            });
             res.status(200).json({
               'message': 'Modifier has been sucessfully attached to the thread',
               modifier: mod,
@@ -183,12 +188,16 @@ var thread = {
             mod.threads.pull(thread._id);
 
             mod.save();
-            thread.save();
+            thread.save(function(err, thread){
+              if (err) { throw err;};
+
+              EntryModifier.removeModifiers(thread, mod);
+            });
             res.status(200).json({
               'message': 'Modifier has been sucessfully removed from the thread',
               modifier: mod,
               thread: thread
-            })
+            });
           } else {
             res.status(404).json({
               'message': 'Sorry we couldn\'t remove that modifier because it doesn\'t exists, please make sure the Modifier ID is correct'

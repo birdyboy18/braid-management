@@ -10,6 +10,17 @@ var modifier = {
       }, { _id: false });
       return modifier_meta;
     }
+  },
+  entryDecider: function(mod) {
+    if (mod.type === 'collection') {
+      var entry_meta = {
+        _modId: mod._id,
+        name: mod.name,
+        type: mod.type,
+        terms: []
+      }
+      return entry_meta
+    }
   }
 }
 
