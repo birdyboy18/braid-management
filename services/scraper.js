@@ -39,7 +39,7 @@ module.exports = function() {
     var now = new Date();
     var timeSinceChecked = Math.ceil((now.getTime() - thread.last_checked.getTime())/min);
 
-    if (timeSinceChecked > 1 && thread.active === true) {
+    if (timeSinceChecked > 15 && thread.active === true) {
       console.log("needs to be scraped, last scraped was " + timeSinceChecked + " mins ago");
       return true;
     } else {

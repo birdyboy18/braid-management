@@ -20,15 +20,21 @@ var entryModifier = {
           we need to check if the entry hasn't already had that modifier applied, or else,
           we will be overwriting it and we don't want that if the user has filled it out
           */
-          entry.modifiers.map(function(modifier){
-            console.log(modifier);
-          })
-          entry.modifiers.push(Modifier.entryDecider(mod));
+          if (entry.modifiers.length > 0) {
+            for (var i = 0; i < entry.modifiers.length; i++) {
+                if (entry.modifiers[i]._modId.toString() != mod._id.toString()) {
+                  //add it it's not already there
+                  entry.modifiers.push(Modifier.entryDecider(mod));
+                }
+            }
+          } else {
+            entry.modifiers.push(Modifier.entryDecider(mod));
+          }
 
           entry.save(function(err, entry){
             if (err) { throw err;};
 
-            console.log('Modifier has sucesfully be applied to entry');
+            //console.log('Modifier has sucesfully be applied to entry');
           });
 
         });
@@ -47,15 +53,18 @@ var entryModifier = {
         entries.map(function(entry){
 
           for (var i = 0; i < entry.modifiers.length; i++) {
-            if (entry.modifiers[i]._modId.toString() === mod._id.toString()) {
-              entry.modifiers.splice(0,i);
+            if (entry.modifiers.length === 1 && entry.modifiers[i]._modId.toString() === mod._id.toString()) {
+              entry.modifiers = [];
+            }
+            else if (entry.modifiers[i]._modId.toString() === mod._id.toString()) {
+              entry.modifiers.splice(i,1);
             }
           }
 
           entry.save(function(err, entry){
             if (err) { throw err;};
 
-            //console.log('Modifier has sucesfully been removed from the entry');
+            console.log('Modifier has sucesfully been removed from the entry');
           });
         });
 

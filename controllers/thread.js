@@ -3,8 +3,9 @@ var Models = require('../models'),
     mongoose = require('mongoose'),
     Service = require('../helpers/service.js'),
     events = require('events'),
-    AppEmitter = require('../actions/app-emitter.js');
-    EntryModifier = require('../services/entry-modifier.js');
+    AppEmitter = require('../actions/app-emitter.js'),
+    EntryModifier = require('../services/entry-modifier.js'),
+    util = require('../helpers/util.js');
 
 
 var thread = {
@@ -146,8 +147,9 @@ var thread = {
 
           if (mod) {
             //then it exists
-            thread.modifiers.push(mod._id);
+
             mod.threads.push(thread._id);
+            thread.modifiers.push(mod._id);
 
             mod.save();
             thread.save(function(err, thread){
