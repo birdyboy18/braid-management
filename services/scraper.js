@@ -48,9 +48,10 @@ module.exports = function() {
     }
   },
 
-  scraper.scrapeThreads = function(threads) {
+  scraper.scrapeThreads = function(threads, now) {
+    var now = now || false;
     threads.map(function(thread){
-      if (scraper.threadNeedsScraping(thread) === true) {
+      if (scraper.threadNeedsScraping(thread) === true || now === true) {
         scraper.scrapeThread(thread);
       }
     });
@@ -147,7 +148,7 @@ module.exports = function() {
       scraper.getThreads(function(threads) {
         scraper.threads = threads;
         console.log("after change: " + scraper.threads);
-        scraper.scrapeThreads(scraper.threads);
+        scraper.scrapeThreads(scraper.threads, true);
       });
     });
   }

@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Models = require('../models'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    AppEmitter = require('../actions/app-emitter.js');
 
 var braid = {
   list: function(req, res) {
@@ -71,11 +72,29 @@ var braid = {
         user.save(function(err, user){
           if (err) { throw err;};
 
+          //find the threads and the entries, belonging to the braid and remove all of them.
+          Models.Thread.findOne({ _braidId: braid._id }, function(err, thread){
+            if (err) { throw err;};
+
+            //find the entries with the threadID and remove them
+            Models.Entry.remove({ _threadId: thread._id }, function(err) {
+              if (err) { throw err;};
+
+              //now we can remove the thread
+              Models.Thread.remove({ _id: thread._id }, function(err) {
+                if (err) { throw err;};
+
+                AppEmitter.emitChange('threadChange');
+              });
+            });
+          })
+
+          //Finally remove the braid
           Models.Braid.remove({ _id: braid._id}, function(err){
             if (err) {throw err;};
 
             res.status(200).json({
-              'message': 'Sucessfully deleted braid, reference has been removed from user',
+              'message': 'Sucessfully deleted braid, reference has been removed from user and all threads and entries too',
               'user': user
             })
           })

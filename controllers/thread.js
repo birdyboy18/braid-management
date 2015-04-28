@@ -4,8 +4,7 @@ var Models = require('../models'),
     Service = require('../helpers/service.js'),
     events = require('events'),
     AppEmitter = require('../actions/app-emitter.js'),
-    EntryModifier = require('../services/entry-modifier.js'),
-    util = require('../helpers/util.js');
+    EntryModifier = require('../services/entry-modifier.js');
 
 
 var thread = {
