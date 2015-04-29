@@ -6,6 +6,7 @@ var user = require('../controllers/user');
 var braid = require('../controllers/braid');
 var modifier = require('../controllers/modifier');
 var thread = require('../controllers/thread');
+var entry = require('../controllers/entry');
 var auth = require('../controllers/auth');
 
 router.get('/', function(req,res){
@@ -44,5 +45,9 @@ Only needs to be a put request because we are updating the thread, the applicati
 */
 router.put('/attach/modifier/:mod_id/to/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.attachModifier);
 router.put('/remove/modifier/:mod_id/from/thread/:thread_id', auth.isAuthenticated, auth.isAuthorized(), thread.removeModifier);
+
+//Entries Routes
+router.get('/entries/', auth.isAuthenticated, auth.isAuthorized(), entry.list);
+router.put('/entries/:entry_id', auth.isAuthenticated, auth.isAuthorized(), entry.update);
 
 module.exports = router;

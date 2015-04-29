@@ -11,6 +11,8 @@ var errorHandler = require('errorhandler');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var Scraper = require('../services/scraper.js')();
+var Email = require('../services/email.js');
+var fs = require('fs');
 
 module.exports = function(app) {
   app.use(logger('dev'));
@@ -30,6 +32,19 @@ module.exports = function(app) {
 
     console.log("Succesfully connected to database");
     Scraper.start();
+
+    var welcomeTemplate = fs.readFileSync('./views/email/welcome.html', 'utf-8');
+
+    var data = {
+      from: 'Braid.io <welcome@mg.paulbird.co>',
+      to: 'paulbird1993@gmail.com',
+      subject: 'Thanks for Signing Up!',
+      html: Email.renderTemplate(welcomeTemplate , { name: 'Nicole'})
+    }
+
+    // Email.send(data, function(result){
+    //   console.log(result);
+    // });
   });
 
   if ('development' === app.get('env')) {
