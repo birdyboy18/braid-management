@@ -27,9 +27,4 @@ router.get('/verify/:token', function(req, res){
   });
 });
 
-router.get('/requestTest', function(req, res) {
-  res.json('Check yo console' + req.headers.host);
-  console.log(req.headers.host);
-})
-
 module.exports = router;
