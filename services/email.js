@@ -19,13 +19,13 @@ var email = {
     mailgun.messages().send(data, function(err, body){
       if (err) { callback(err); };
 
-      callback(body);
+      callback(null,body);
     });
   },
-  renderTemplate: function(file, data) {
+  renderTemplate: function(file, data, cb) {
     var template = fs.readFileSync(file, 'utf-8');
     var email = hogan.compile(template);
-    return email.render(data);
+    cb(email.render(data));
   },
   verifyUser: function(token, cb) {
     Models.VerificationToken.findOne({ token: token}, function(err, token){
@@ -40,7 +40,7 @@ var email = {
 
         user.verified = true;
         user.save(function(err, user){
-          if (err) { cb(err);};
+          if (err) { cb(true,err);};
 
           cb(null,user);
         });

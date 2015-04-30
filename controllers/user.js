@@ -45,19 +45,24 @@ var user = {
             //We've succesfully created a user and made a verification token, send them an email man!
             var context = {
               name: user.firstName,
-              verifyLink: req.protocol + '://' + req.headers.host + '/email/verify/' + token.token
-            };
-            var emailData = {
-              from: 'Braid.io <welcome@mg.paulbird.co>',
-              to: user.email,
-              subject: 'Thanks for signing up',
-              html: EmailService.renderTemplate('./views/email/welcome.html', context)
+              verifyLink: req.protocol + '://' + req.headers.host + '/email/verify/' + token.token,
+              assetsUrl: req.protocol + '://' + req.headers.host + '/public/assets/email/'
             };
 
-            EmailService.send(emailData, function(err, result){
-              if (err) { throw err;};
+            EmailService.renderTemplate('./views/email/welcome.html', context, function(compiledHtml){
+              var emailData = {
+                from: 'Braid.io <welcome@mg.paulbird.co>',
+                to: user.email,
+                subject: 'Thanks for signing up',
+                html: compiledHtml
+              };
 
-              console.log(result);
+              EmailService.send(emailData, function(err, result){
+                if (err) { throw err;};
+
+                console.log(result);
+              });
+              
             });
           })
 
