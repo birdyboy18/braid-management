@@ -33,14 +33,12 @@ module.exports = function(app) {
     console.log("Succesfully connected to database");
     Scraper.start();
 
-    var welcomeTemplate = fs.readFileSync('./views/email/welcome.html', 'utf-8');
-
-    var data = {
-      from: 'Braid.io <welcome@mg.paulbird.co>',
-      to: 'paulbird1993@gmail.com',
-      subject: 'Thanks for Signing Up!',
-      html: Email.renderTemplate(welcomeTemplate , { name: 'Nicole'})
-    }
+    // var data = {
+    //   from: 'Braid.io <welcome@mg.paulbird.co>',
+    //   to: 'paulbird1993@gmail.com',
+    //   subject: 'Thanks for Signing Up!',
+    //   html: Email.renderTemplate('./views/email/welcome.html' , { name: 'Moose'})
+    // }
 
     // Email.send(data, function(result){
     //   console.log(result);

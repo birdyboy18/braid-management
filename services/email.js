@@ -1,6 +1,7 @@
 var config = require('../config.js');
 var mailgun = require('mailgun-js')({apiKey: config.apiKeys.mailgun , domain: config.domains.mailgun });
 var hogan = require('hogan');
+var Models = require('../models');
 var fs = require('fs');
 
 /*
@@ -21,10 +22,30 @@ var email = {
       callback(body);
     });
   },
-  renderTemplate: function(template, data) {
-    //var template = fs.readFileSync(file);
+  renderTemplate: function(file, data) {
+    var template = fs.readFileSync(file, 'utf-8');
     var email = hogan.compile(template);
     return email.render(data);
+  },
+  verifyUser: function(token, cb) {
+    Models.VerificationToken.findOne({ token: token}, function(err, token){
+      if (err) { cb(err);};
+
+      if (token == null) {
+        return cb(true,'Couldn\'t find token in database');
+      }
+
+      Models.User.findOne({ username: token._userId }, function(err, user){
+        if (err) { cb(err);};
+
+        user.verified = true;
+        user.save(function(err, user){
+          if (err) { cb(err);};
+
+          cb(null,user);
+        });
+      })
+    })
   }
 }
 

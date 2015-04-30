@@ -3,5 +3,6 @@ module.exports = {
   'Braid': require('./braid'),
   'Thread': require('./thread'),
   'Modifier': require('./modifier'),
-  'Entry': require('./entry')
+  'Entry': require('./entry'),
+  'VerificationToken': require('./verificationToken')
 }

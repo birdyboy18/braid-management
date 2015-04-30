@@ -12,6 +12,7 @@ var user = new Schema({
   password: { type: String, required: true},
   last_logged_in: { type: Date, default: Date.now },
   created: { type: Date, default: Date.now },
+  verified: { type: Boolean, default: false },
   braids: [{ type: Schema.Types.ObjectId, ref: 'Braid'}],
   modifiers: [{ type: Schema.Types.ObjectId, ref: 'Modifier'}]
 });

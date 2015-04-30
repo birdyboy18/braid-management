@@ -1,10 +1,12 @@
 var _ = require('lodash');
 var User = require('../models').User,
+    VerificationToken = require('../models').VerificationToken,
+    EmailService = require('../services/email');
     mongoose = require('mongoose');
 
 var user = {
   list: function(req,res) {
-    User.find({},'-__v -password',{}).exec(function(err, users){
+    User.find({},'-__v -password -_id',{}).exec(function(err, users){
       if (err) { throw err;}
 
       res.status(200).json(users);
@@ -34,6 +36,33 @@ var user = {
         });
 
         newUser.save(function(err, user) {
+          if (err) { throw err;};
+
+          var verificationToken = new VerificationToken({ _userId: user.username });
+          verificationToken.createToken(function(err, token){
+            if (err) return console.log("Couldn't create verification token", err);
+
+            //We've succesfully created a user and made a verification token, send them an email man!
+            var context = {
+              name: user.firstName,
+              verifyLink: req.protocol + '://' + req.headers.host + '/email/verify/' + token.token
+            };
+            var emailData = {
+              from: 'Braid.io <welcome@mg.paulbird.co>',
+              to: user.email,
+              subject: 'Thanks for signing up',
+              html: EmailService.renderTemplate('./views/email/welcome.html', context)
+            };
+
+            EmailService.send(emailData, function(err, result){
+              if (err) { throw err;};
+
+              console.log(result);
+            });
+          })
+
+
+
           res.json({
             'message': 'New user sucessfully created!',
             'user': user
