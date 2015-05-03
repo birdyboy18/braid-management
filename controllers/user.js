@@ -51,7 +51,7 @@ var user = {
 
             EmailService.renderTemplate('./views/email/welcome.html', context, function(compiledHtml){
               var emailData = {
-                from: 'Braid.io <welcome@mg.paulbird.co>',
+                from: 'Braid.io <welcome@mg.getbraid.io>',
                 to: user.email,
                 subject: 'Thanks for signing up',
                 html: compiledHtml
@@ -62,7 +62,7 @@ var user = {
 
                 console.log(result);
               });
-              
+
             });
           })
 
