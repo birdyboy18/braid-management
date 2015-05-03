@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="350px" height="350px" viewBox="0 0 350 350" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>explanation-braids@2x</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <rect id="path-1" x="-211" y="-2216" width="1440" height="4890"></rect>
+    </defs>
+    <g id="Website---homepage" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <mask id="mask-2" sketch:name="maxwidth" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="maxwidth" stroke="#979797" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+        <path d="M179,64 C206.614239,64 229,56.1649836 229,46.5 C229,36.8350164 206.614239,29 179,29 C151.385761,29 129,36.8350164 129,46.5 C129,56.1649836 151.385761,64 179,64 Z" id="Oval-19" fill="#5AC7AA" sketch:type="MSShapeGroup" mask="url(#mask-2)" transform="translate(179.000000, 46.500000) rotate(-180.000000) translate(-179.000000, -46.500000) "></path>
+        <path d="M172,60.9999995 C183.994881,61.1411159 217.071066,50.1123103 217.5,44 C217.928934,37.8876897 195.685147,32.8410979 177.606963,32.5 C159.528778,32.1589026 141.488032,38.9978473 139,43.5000004 C136.511969,48.0021535 153.88165,54.6406214 168,55.4999995 C182.118349,56.3593777 203.000001,49.5000009 203,43.5000005 C202.999998,37.5 159.499999,34.0000014 156.5,43.5000005 C153.5,52.9999995 175,45 175,45" id="Path-40" stroke="#9ADCB9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup" mask="url(#mask-2)" transform="translate(178.500000, 46.500000) rotate(-180.000000) translate(-178.500000, -46.500000) "></path>
+        <path d="M172.75,49 L172.75,196.013605 L85.5,284" id="Path-42" stroke="#5AC7AA" stroke-width="5" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+        <path d="M180.75,49 L180.75,330.5" id="Path-42-copy" stroke="#9ADCB9" stroke-width="5" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+        <path d="M188.75,49 L188.75,196.013605 L271,283.5" id="Path-42-copy-2" stroke="#7ECECA" stroke-width="5" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+    </g>
+</svg>

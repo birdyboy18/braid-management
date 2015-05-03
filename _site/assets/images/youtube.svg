@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="110px" height="65px" viewBox="0 0 110 65" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>youtube</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page-6" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="youtube-logo" sketch:type="MSLayerGroup">
+            <rect id="Rectangle-1" fill="#E8263E" sketch:type="MSShapeGroup" x="0" y="0" width="110" height="65" rx="10"></rect>
+            <path d="M47,50 L47,15 L72,32.5 L47,50 Z" id="Triangle-1" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="715px" height="396px" viewBox="0 0 715 396" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>dashboard@2x</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="715" height="366"></rect>
+    </defs>
+    <g id="Page-6" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="browser-bar" sketch:type="MSLayerGroup">
+            <rect id="Rectangle-17" fill="#F7F7F7" sketch:type="MSShapeGroup" x="0" y="0" width="715" height="31"></rect>
+            <circle id="Oval-21" fill="#F38694" sketch:type="MSShapeGroup" cx="19.5" cy="16.5" r="7.5"></circle>
+            <circle id="Oval-21-copy" fill="#F1E43F" sketch:type="MSShapeGroup" cx="43.5" cy="16.5" r="7.5"></circle>
+            <circle id="Oval-21-copy-2" fill="#7ED321" sketch:type="MSShapeGroup" cx="67.5" cy="16.5" r="7.5"></circle>
+            <rect id="Rectangle-33" fill="#D4D4D4" sketch:type="MSShapeGroup" x="91" y="8" width="380" height="16"></rect>
+        </g>
+        <g id="adminui" sketch:type="MSLayerGroup" transform="translate(0.000000, 30.000000)">
+            <mask id="mask-2" sketch:name="Rectangle 1" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Rectangle-1" stroke="#EEEEEE" stroke-width="0.5" fill="#F7F7F7" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <rect id="Rectangle-2" stroke="#EEEEEE" stroke-width="0.993055556" fill="#FFFFFF" sketch:type="MSShapeGroup" mask="url(#mask-2)" x="0" y="0" width="715" height="39.7222222"></rect>
+            <circle id="Oval-1" fill="#D8D8D8" sketch:type="MSShapeGroup" mask="url(#mask-2)" cx="590.371528" cy="19.8611111" r="11.9166667"></circle>
+            <path d="M607.253472,18.8680556 L615.197917,18.8680556 L611.225694,23.8333333 L607.253472,18.8680556 Z" id="Triangle-1" fill="#9B9B9B" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+            <path d="M547.173611,18.8680556 L555.118056,18.8680556 L551.145833,23.8333333 L547.173611,18.8680556 Z" id="Triangle-1-copy" fill="#9B9B9B" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+            <text id="testing-braid" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#4A4A4A">
+                <tspan x="496.527778" y="23.8888889">testing-braid</tspan>
+            </text>
+            <g id="braid" mask="url(#mask-2)" transform="translate(485.107639, 13.902778)" stroke-width="0.5" sketch:type="MSShapeGroup">
+                <path d="M0.248263889,0.248263889 L2.234375,2.48263889 L2.234375,12.6614583" id="Path-3" stroke="#D4D4D4"></path>
+                <path d="M4.22048611,0.248263889 L6.20659722,2.48263889 L6.20659722,12.6614583" id="Path-3-copy" stroke="#D4D4D4" transform="translate(5.213542, 6.454861) scale(-1, 1) translate(-5.213542, -6.454861) "></path>
+                <path d="M3.22743056,0.248263889 L3.22743056,13.1579861" id="Path-5" stroke="#979797"></path>
+            </g>
+            <path d="M175.770833,39.4739583 L175.770833,0.993055556" id="Line" stroke="#EEEEEE" stroke-width="0.5" stroke-linecap="square" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+            <path d="M84.4097222,37.984375 L84.4097222,-0.496527778" id="Line-copy" stroke="#EEEEEE" stroke-width="0.5" stroke-linecap="square" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+            <text id="Threads" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#000000">
+                <tspan x="191.163194" y="22.8958333">Threads</tspan>
+            </text>
+            <text id="Entries" opacity="0.3" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#000000">
+                <tspan x="281.034722" y="22.8958333">Entries</tspan>
+            </text>
+            <text id="Modifiers" opacity="0.3" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#000000">
+                <tspan x="234.361111" y="22.8958333">Modifiers</tspan>
+            </text>
+            <text id="API-Map" opacity="0.3" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#000000">
+                <tspan x="318.770833" y="22.8958333">API Map</tspan>
+            </text>
+            <text id="Braid-Settings" opacity="0.3" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#000000">
+                <tspan x="360.975694" y="22.8958333">Braid Settings</tspan>
+            </text>
+            <g id="sidebar" mask="url(#mask-2)" transform="translate(84.409722, 131.083333)">
+                <rect id="Rectangle-3" stroke="#EEEEEE" stroke-width="0.993055556" fill="#FFFFFF" sketch:type="MSShapeGroup" x="0" y="0" width="91.3611111" height="98"></rect>
+                <text id="FILTER-BY" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="6.95138889" font-weight="normal" fill="#9B9B9B">
+                    <tspan x="9.43402778" y="13.4548611">FILTER BY</tspan>
+                </text>
+                <path d="M5.21354167,18.1232639 L85.1930551,18.1232639" id="Line" stroke="#D4D4D4" stroke-width="0.5" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
+                <text id="Youtube" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="5.95833333" font-weight="normal" fill="#4A4A4A">
+                    <tspan x="19.3645833" y="29.8333333">Youtube</tspan>
+                    <tspan x="19.3645833" y="47.8333333">Soundcloud</tspan>
+                    <tspan x="19.3645833" y="65.8333333">Vimeo</tspan>
+                    <tspan x="19.3645833" y="83.8333333">Bandcamp</tspan>
+                </text>
+            </g>
+            <text id="Currently-Used-Threa" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="11.9166667" font-weight="normal" line-spacing="14.8958333" fill="#9B9B9B">
+                <tspan x="194.142361" y="141.517361">Currently Used Threads</tspan>
+            </text>
+            <path id="Line" stroke="#EEEEEE" stroke-width="0.5" stroke-linecap="square" sketch:type="MSShapeGroup" mask="url(#mask-2)" d="M196.376736,152.682292 L602.044779,152.682292"></path>
+            <text id="Available-Threads" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="11.9166667" font-weight="normal" line-spacing="14.8958333" fill="#9B9B9B">
+                <tspan x="194.142361" y="307.854167">Available Threads</tspan>
+            </text>
+            <path id="Line-copy" stroke="#EEEEEE" stroke-width="0.5" stroke-linecap="square" sketch:type="MSShapeGroup" mask="url(#mask-2)" d="M196.376736,326.467014 L602.044779,326.467014"></path>
+            <text id="Add-Thread" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="5.95833333" font-weight="normal" fill="#4A4A4A">
+                <tspan x="344.590278" y="249.822917">Add Thread</tspan>
+            </text>
+            <text id="+" sketch:type="MSTextLayer" mask="url(#mask-2)" font-family="Source Sans Pro" font-size="23.8333333" font-weight="normal" fill="#D4D4D4">
+                <tspan x="353.03125" y="231.541667">+</tspan>
+            </text>
+            <g id="message" mask="url(#mask-2)" transform="translate(84.906250, 65.045139)">
+                <rect id="Rectangle-5" stroke="#EEEEEE" stroke-width="0.993055556" fill="#FFFFFF" sketch:type="MSShapeGroup" x="0" y="0" width="533.270833" height="53.1284722"></rect>
+                <text id="Threads-are-external" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" line-spacing="13" fill="#4A4A4A">
+                    <tspan x="15.8888889" y="17.9513889">Threads are external services that weave into this current braid of content. When ever one of these threads are updated the content in this braid will be </tspan>
+                    <tspan x="15.8888889" y="30.9513889">automatically updated too.</tspan>
+                </text>
+                <text id="+" sketch:type="MSTextLayer" transform="translate(524.364583, 13.506944) rotate(-45.000000) translate(-524.364583, -13.506944) " font-family="Source Sans Pro" font-size="17.875" font-weight="normal" fill="#D4D4D4">
+                    <tspan x="519.864583" y="17.0069444">+</tspan>
+                </text>
+            </g>
+            <g id="thread-card" mask="url(#mask-2)" transform="translate(194.142361, 151.364583)">
+                <rect id="Rectangle-6" stroke="#EEEEEE" stroke-width="0.993055556" fill="#FFFFFF" sketch:type="MSShapeGroup" x="0" y="0" width="104.270833" height="131.083333"></rect>
+                <g id="youtube_icon" transform="translate(6.951389, 9.434028)" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" fill="#E8263E" x="0" y="0" width="19.3645833" height="11.2960069" rx="1.73784722"></rect>
+                    <path d="M8.1859375,8.68923611 L8.1859375,2.60677083 L12.5869792,5.64800347 L8.1859375,8.68923611 Z" id="Triangle-1" fill="#FFFFFF"></path>
+                </g>
+                <text id="Yogscast-Lewis" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="7.94444444" font-weight="526" fill="#4A4A4A">
+                    <tspan x="26.8125" y="76.0243056">Yogscast Lewis</tspan>
+                </text>
+                <text id="Status:-Active" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="6.95138889" font-weight="526" fill="#4A4A4A">
+                    <tspan x="50.6458333" y="17.9236111">Status:</tspan>
+                    <tspan x="71.8614722" y="17.9236111" font-weight="normal"> Active</tspan>
+                </text>
+                <path d="M45.6805556,17.875 C46.7774545,17.875 47.6666667,16.9857878 47.6666667,15.8888889 C47.6666667,14.79199 46.7774545,13.9027778 45.6805556,13.9027778 C44.5836566,13.9027778 43.6944444,14.79199 43.6944444,15.8888889 C43.6944444,16.9857878 44.5836566,17.875 45.6805556,17.875 Z" id="Oval-2" fill="#7ED321" sketch:type="MSShapeGroup"></path>
+                <text id="last-checked:-15-min" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="6.95138889" font-weight="526" fill="#9B9B9B">
+                    <tspan x="13.9027778" y="87.9340278">last checked: </tspan>
+                    <tspan x="54.5892569" y="87.9340278" font-weight="normal">15 mins ago</tspan>
+                </text>
+                <rect id="Rectangle-8" stroke="#EEEEEE" stroke-width="0.5" fill="#FFFFFF" sketch:type="MSShapeGroup" x="0.496527778" y="108.243056" width="52.1354167" height="22.34375"></rect>
+                <rect id="Rectangle-8-copy" stroke="#EEEEEE" stroke-width="0.5" fill="#9ADCB9" sketch:type="MSShapeGroup" x="51.6388889" y="108.243056" width="52.1354167" height="22.34375"></rect>
+                <text id="Info" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#4A4A4A">
+                    <tspan x="19.3645833" y="121.236111">Info</tspan>
+                </text>
+                <text id="Edit" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="7.94444444" font-weight="normal" fill="#FFFFFF">
+                    <tspan x="71.5" y="121.236111">Edit</tspan>
+                </text>
+                <path d="M51.6388889,60.5763889 C59.3171814,60.5763889 65.5416667,54.3519036 65.5416667,46.6736111 C65.5416667,38.9953186 59.3171814,32.7708333 51.6388889,32.7708333 C43.9605964,32.7708333 37.7361111,38.9953186 37.7361111,46.6736111 C37.7361111,54.3519036 43.9605964,60.5763889 51.6388889,60.5763889 Z" id="Oval-3" fill="#F7F7F7" sketch:type="MSShapeGroup"></path>
+                <text id="Affects:-16-Entries" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="6.95138889" font-weight="526" fill="#9B9B9B">
+                    <tspan x="25.3229167" y="97.8645833">Affects:</tspan>
+                    <tspan x="47.636875" y="97.8645833" font-weight="normal"> 16 Entries</tspan>
+                </text>
+            </g>
+            <g id="thread-explanation-card" mask="url(#mask-2)" transform="translate(194.142361, 325.149306)">
+                <rect id="Rectangle-11" stroke="#EEEEEE" stroke-width="0.993055556" fill="#FFFFFF" sketch:type="MSShapeGroup" x="0" y="0" width="104.270833" height="127.111111"></rect>
+                <g id="youtube_icon" transform="translate(39.722222, 19.364583)" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" fill="#E8263E" x="0" y="0" width="25.3229167" height="14.684809" rx="2.25920139"></rect>
+                    <path d="M10.7046875,11.2960069 L10.7046875,3.38880208 L16.4598958,7.34240451 L10.7046875,11.2960069 Z" id="Triangle-1" fill="#FFFFFF"></path>
+                </g>
+                <text id="YouTube" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="7.94444444" font-weight="526" line-spacing="14.8958333" fill="#4A4A4A">
+                    <tspan x="37.7361111" y="46.7291667">YouTube</tspan>
+                </text>
+            </g>
+            <g id="thread-explanation-card-copy" mask="url(#mask-2)" transform="translate(306.854167, 325.149306)">
+                <rect id="Rectangle-11" stroke="#EEEEEE" stroke-width="0.993055556" fill="#FFFFFF" sketch:type="MSShapeGroup" x="0" y="0" width="104.270833" height="128.104167"></rect>
+                <text id="SoundCloud" sketch:type="MSTextLayer" font-family="Source Sans Pro" font-size="7.94444444" font-weight="526" line-spacing="14.8958333" fill="#4A4A4A">
+                    <tspan x="32.2743056" y="46.7291667">SoundCloud</tspan>
+                </text>
+                <g id="soundcloud_logo" transform="translate(33.267361, 17.875000)" fill="#F6A623" sketch:type="MSShapeGroup">
+                    <path d="M18.8680556,0.297916679 C25.6066468,-1.34062505 29.9492945,3.036629 29.9492945,7.15 C29.9492945,7.28855633 29.9449585,7.42622897 29.9363984,7.56292025 C30.6263282,7.29755218 31.3908808,7.15 32.1954916,7.15 C35.2554914,7.15 37.7361111,9.28410923 37.7361111,11.9166667 C37.7361111,14.4191119 35.4946375,16.4711621 32.644731,16.6678915 L18.8680556,16.6833333 L18.8680556,14.26104 L18.8680556,0.297916679 Z" id="cloudhalf1"></path>
+                    <ellipse id="Oval-1" cx="0.598985891" cy="11.7677083" rx="0.598985891" ry="2.83020833"></ellipse>
+                    <ellipse id="Oval-1-copy" cx="2.99492945" cy="11.7677083" rx="0.598985891" ry="4.61770833"></ellipse>
+                    <ellipse id="Oval-1-copy-2" cx="5.39087302" cy="12.3635417" rx="0.598985891" ry="4.61770833"></ellipse>
+                    <ellipse id="Oval-1-copy-3" cx="7.78681658" cy="11.0229167" rx="0.598985891" ry="5.95833333"></ellipse>
+                    <path d="M10.1827601,16.98125 C10.5135709,16.98125 10.781746,13.9801589 10.781746,10.278125 C10.781746,6.5760911 10.5135709,3.575 10.1827601,3.575 C9.85194935,3.575 9.58377425,6.5760911 9.58377425,10.278125 C9.58377425,13.9801589 9.85194935,16.98125 10.1827601,16.98125 Z" id="Oval-1-copy-4"></path>
+                    <path d="M12.5787037,16.98125 C12.9095145,16.98125 13.1776896,13.9801589 13.1776896,10.278125 C13.1776896,6.5760911 12.9095145,3.575 12.5787037,3.575 C12.2478929,3.575 11.9797178,6.5760911 11.9797178,10.278125 C11.9797178,13.9801589 12.2478929,16.98125 12.5787037,16.98125 Z" id="Oval-1-copy-5"></path>
+                    <path d="M14.9746473,16.98125 C15.3054581,16.98125 15.5736332,14.1135407 15.5736332,10.5760417 C15.5736332,7.03854261 15.3054581,4.17083333 14.9746473,4.17083333 C14.6438365,4.17083333 14.3756614,7.03854261 14.3756614,10.5760417 C14.3756614,14.1135407 14.6438365,16.98125 14.9746473,16.98125 Z" id="Oval-1-copy-6"></path>
+                    <path d="M17.3705908,16.98125 C17.7014016,16.98125 17.9695767,13.5800134 17.9695767,9.384375 C17.9695767,5.18873658 17.7014016,1.7875 17.3705908,1.7875 C17.03978,1.7875 16.7716049,5.18873658 16.7716049,9.384375 C16.7716049,13.5800134 17.03978,16.98125 17.3705908,16.98125 Z" id="Oval-1-copy-7"></path>
+                </g>
+            </g>
+            <circle id="Oval-14" fill="#FFFFFF" sketch:type="MSShapeGroup" mask="url(#mask-2)" cx="251.739583" cy="171.302083" r="0.496527778"></circle>
+            <g id="logo-black-copy-3" transform="translate(102.781250, 11.420139)" stroke-width="0.993055556" sketch:type="MSShapeGroup">
+                <path d="M0.305555556,0.297916667 L2.75,2.97916667 L2.75,15.19375" id="Path-3" stroke="#5AC7AA"></path>
+                <path d="M5.69097222,0.297916667 L8.13541667,2.97916667 L8.13541667,15.19375" id="Path-3-copy" stroke="#7ECECA" transform="translate(6.913194, 7.745833) scale(-1, 1) translate(-6.913194, -7.745833) "></path>
+                <path d="M4.22048611,-0.198611111 L4.22048611,15.8888889" id="Path-5" stroke="#9ADCB9"></path>
+            </g>
+            <text id="Braid.io-copy-2" sketch:type="MSTextLayer" font-family="Lato" font-size="11.9166667" font-weight="260">
+                <tspan x="114.201389" y="23.9166667" fill="#4A4A4A">Braid.</tspan>
+                <tspan x="144.058597" y="23.9166667" fill="#9B9B9B">io</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

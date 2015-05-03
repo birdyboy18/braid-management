@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="85px" height="75px" viewBox="0 0 85 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>google_drive</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <radialGradient cx="50.0913033%" cy="49.7776118%" fx="50.0913033%" fy="49.7776118%" r="600.611687%" id="radialGradient-1">
+            <stop stop-color="#0DA960" offset="0%"></stop>
+            <stop stop-color="#069B5A" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="49.6118668%" cy="49.324739%" fx="49.6118668%" fy="49.324739%" r="362.094331%" id="radialGradient-2">
+            <stop stop-color="#4387FD" offset="0%"></stop>
+            <stop stop-color="#3078F0" offset="65%"></stop>
+            <stop stop-color="#2B72EA" offset="90.99%"></stop>
+            <stop stop-color="#286EE6" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="49.9517538%" cy="49.9570016%" fx="49.9517538%" fy="49.9570016%" r="510.323143%" id="radialGradient-3">
+            <stop stop-color="#FFD24D" offset="0%"></stop>
+            <stop stop-color="#F6C338" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="49.9983317%" cy="50.0001881%" fx="49.9983317%" fy="50.0001881%" r="450.052929%" id="radialGradient-4" stop-color="#FFFFFF">
+            <stop stop-opacity="0.1" offset="0%"></stop>
+            <stop stop-opacity="0.091" offset="8.96%"></stop>
+            <stop stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Page-6" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Group" sketch:type="MSLayerGroup" transform="translate(-1.000000, 1.000000)">
+            <path d="M14.9604167,75.05 L0,48.9361738 L28.6666667,0 L43,25.0166667 L14.9604167,75.05 Z" id="Shape" fill="url(#radialGradient-1)" sketch:type="MSShapeGroup"></path>
+            <path d="M15.2888889,75.05 L28.931764,50.35 L86,50.35 L71.1087572,75.05 L15.2888889,75.05 Z" id="Shape" fill="url(#radialGradient-2)" sketch:type="MSShapeGroup"></path>
+            <path d="M86,50.35 L57.3333333,50.35 L28.6666667,0 L57.3333333,0 L86,50.35 Z" id="Shape" fill="url(#radialGradient-3)" sketch:type="MSShapeGroup"></path>
+            <path d="M43,49.78 L28.8345758,49.78 L35.9172879,38.95 L15.2888889,75.05 L43,49.78 Z" id="Shape" opacity="0.08" fill="#231F20" sketch:type="MSShapeGroup"></path>
+            <path d="M57.9066667,50.35 L86.9555556,50.35 L50.6444444,36.1 L57.9066667,50.35 Z" id="Shape" opacity="0.08" fill="#231F20" sketch:type="MSShapeGroup"></path>
+            <path d="M36.3184334,37.05 L43,25.7832714 L27.7111111,0 L36.3184334,37.05 Z" id="Shape" opacity="0.08" fill="#231F20" sketch:type="MSShapeGroup"></path>
+            <path d="M86,48.9361738 L57.9604167,0 L28.036,0 L0,48.9361738 L14.9604167,75.05 L71.0395833,75.05 L86,48.9361738 L86,48.9361738 Z M42.5222222,25.65 L55.4222222,48.45 L29.6222222,48.45 L42.5222222,25.65 L42.5222222,25.65 Z" id="Shape" fill="url(#radialGradient-4)" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
