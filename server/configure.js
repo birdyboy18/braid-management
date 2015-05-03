@@ -1,5 +1,6 @@
 //To keep the server lighweight we'll make a configure module
 //that takes the app and then returns the app with all the config set up
+var config = require('../config.js');
 var path = require('path');
 var routes = require('../routes');
 var favicon = require('serve-favicon');
@@ -25,7 +26,11 @@ module.exports = function(app) {
   //init the routes
   routes.init(app);
   //Connect to the database
-  mongoose.connect('mongodb://localhost/braid');
+  var options = {
+    user: config.db.user,
+    pass: config.db.pass
+  }
+  mongoose.connect('mongodb://localhost/braid', options);
   mongoose.connection.on('open', function(err){
     if (err) throw err;
 

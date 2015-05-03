@@ -12,4 +12,5 @@ module.exports.init = function(app) {
   app.use('/email/', emailRoutes);
   //serve up any files in the public folder
   app.use('/public/', serveStatic(path.join(__dirname, '/public/')));
+  app.use('/', serveStatic(path.join(__dirname, '/_site/')));
 }
