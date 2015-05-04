@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var expressSession = require('express-session');
 var Scraper = require('../services/scraper.js')();
 var Email = require('../services/email.js');
 
@@ -20,8 +21,10 @@ module.exports = function(app) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(methodOverride());
+  app.use(expressSession({ secret: 'uni work sucks', resave: false, saveUninitialized: false}));
   //init passport for authentication
   app.use(passport.initialize());
+  app.use(passport.session());
 
   //init the routes
   routes.init(app);
@@ -30,7 +33,7 @@ module.exports = function(app) {
     user: config.db.user,
     pass: config.db.pass
   }
-  mongoose.connect('mongodb://46.101.61.168/braid', options);
+  mongoose.connect('mongodb://localhost/braid', options);
   mongoose.connection.on('open', function(err){
     if (err) throw err;
 

@@ -1,5 +1,6 @@
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
+var LocalStrategy = require('passport-local').Strategy;
 var Models = require('../models/');
 var _ = require('lodash');
 
@@ -23,6 +24,38 @@ passport.use(new BasicStrategy(function(username, password, cb) {
   });
 }));
 
+passport.use(new LocalStrategy(function(username, password, cb){
+  Models.User.findOne({ username: username }, function(err, user){
+    if (err) { return cb(err);};
+
+    //if we didn't find a user with that username
+    if (!user) { return cb(null, false, { message: 'Username is wrong, we couldn\'t find it!'}); };
+
+    //check the password using verifyPassword method of the user
+    user.verifyPassword( password, function(err, isMatch){
+      if (err) { return cb(err); };
+
+      // the password didn't match, it's wrong
+      if (!isMatch) { return cb(null,false, { message: 'Password is wrong, you\'re not trying to hack in are you!'});};
+
+      //success, they're authenticated.
+      return cb(null, user);
+    });
+  });
+}));
+
+passport.serializeUser(function(user, cb){
+  cb(null, user.username);
+});
+
+passport.deserializeUser(function(user, cb){
+  Models.User.findOne({ username: user }, function(err, dbUser){
+    if (err) { return cb(err)};
+
+    cb(null, dbUser);
+  })
+});
+
 var auth = {
   restrictTo: function(role) {
     return function(req, res, next) {
@@ -41,6 +74,15 @@ var auth = {
         next();
       } else {
         next(res.json(403, {message: 'You need admin priveleges or to be the owner of this account'}));
+      }
+    }
+  },
+  clientIsAuthenticated: function() {
+    return function(req,res,next) {
+      if (!req.isAuthenticated()) {
+        res.redirect('/login');
+      } else {
+        next();
       }
     }
   },
@@ -157,5 +199,5 @@ var auth = {
 
 //don't set a session because we want to have the user authenticate on every request.
 auth.isAuthenticated = passport.authenticate('basic', {session: false});
-
+auth.localAuthentication = passport.authenticate('local', { successRedirect: '/admin', failureRedirect: '/login', flashFailure: true});
 module.exports = auth;

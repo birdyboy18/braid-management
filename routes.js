@@ -4,12 +4,16 @@
 
 var mangementApiv1 = require('./routes/mangementApiV1');
 var emailRoutes = require('./routes/emailRoutes');
+var loginRoutes = require('./routes/loginRoutes.js');
+var adminRoutes = require('./routes/adminRoutes.js');
 var serveStatic = require('serve-static');
 var path = require('path');
 
 module.exports.init = function(app) {
   app.use('/api/mangement/v1/', mangementApiv1);
   app.use('/email/', emailRoutes);
+  app.use('/', loginRoutes);
+  app.use('/', adminRoutes);
   //serve up any files in the public folder
   app.use('/public/', serveStatic(path.join(__dirname, '/public/')));
   app.use('/', serveStatic(path.join(__dirname, '/_site/')));

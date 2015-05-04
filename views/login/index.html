@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>Braid - Login</title>
+		<link rel="stylesheet" href="css/style.css">
+		<style>
+			.login-form {
+				margin: 0 auto 0 auto;
+				position: absolute;
+				top: 40%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				text-align: center;
+			}
+
+			.login-form input {
+				border: none;
+				padding: 10px 15px;
+				font-size: 16px;
+				display: inline-block;
+				border-radius: 3px;
+				font-family: 'Lato', sans-serif;
+				font-weight: 300;
+			}
+
+			.login-form input[type="text"], .login-form input[type="password"] {
+				width: 250px;
+				background: rgba(0,0,0,0.1);
+				color:#fff;
+			}
+
+			.login-form input[type="text"]:focus, .login-form input[type="password"]:focus {
+				background: rgba(0,0,0,0.15);
+			}
+
+			.login-form input[type="submit"] {
+				width: 100px;
+				text-transform: uppercase;
+				font-size: 14px;
+				padding: 11px 15px;
+				position:relative;
+				top:-1px;
+				margin-left: 10px;
+			}
+
+			.login-form input:focus {
+				outline: none;
+				-webkit-outline: none;
+			}
+
+			.login__logo {
+				width: 250px;
+				padding: 50px 0;
+				margin: 0 auto 0 auto;
+			}		
+
+			.login__logo p {
+				font-size: 20px;
+				text-transform: uppercase;
+				color:rgba(255,255,255,0.4);
+				font-weight: 300;
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+		</style>
+	</head>
+	<body class="background--d_green">
+		<div class="container">
+			<form class="login-form half" action="/login" method="POST">
+				<div class="login__logo">
+					<img src="/assets/images/logo@2x.png" alt="">
+					<p>Login</p>
+				</div>
+				<input type="text" name="username" placeholder="Username">
+				<input type="password" name="password" placeholder="Password">
+				<input class="btn btn--orange" type="submit" value="log in">
+			</form>
+		</div>
+	</body>
+</html>
