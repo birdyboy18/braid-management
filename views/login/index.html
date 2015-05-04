@@ -40,6 +40,7 @@
 				position:relative;
 				top:-1px;
 				margin-left: 10px;
+				cursor: pointer;
 			}
 
 			.login-form input:focus {
@@ -61,9 +62,25 @@
 				margin-top: 0;
 				margin-bottom: 0;
 			}
+
+			.back-to-site {
+				font-size: 14px;
+				position: absolute;
+				top:0;
+				left:0;
+				padding: 10px 15px;
+				color: rgba(255,255,255,0.4);
+				margin: 20px;
+				font-weight: 300;
+			}
+
+			.back-to-site:hover {
+				color:#fff;
+			}
 		</style>
 	</head>
 	<body class="background--d_green">
+	<a class="back-to-site" href="/">&larr; Back to Site</a>
 		<div class="container">
 			<form class="login-form half" action="/login" method="POST">
 				<div class="login__logo">
