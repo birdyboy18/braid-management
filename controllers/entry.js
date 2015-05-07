@@ -25,7 +25,19 @@ var entry = {
         //Time to update it.
         _.extend(entry, req.body);
 
-        entry.save();
+        if (req.body.modifier_slug && req.body.modifier_term) {
+          console.log(entry);
+        }
+        // entry.save(function(err,entry){
+        //   if (err) { res.status(400).json({
+        //     'message': err
+        //   })};
+
+        //   res.json({
+        //     'message': 'entry succesfully modified',
+        //     'entry': entry
+        //   })
+        // });
       });
     } else {
       res.status(404).json({

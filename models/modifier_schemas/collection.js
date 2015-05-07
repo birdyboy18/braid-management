@@ -10,6 +10,17 @@ var collection = new Schema({
   terms: { type: Array },
   slug: { type: String },
   slug_singular: {type: String }
-});
+}, { _id: false });
 
-module.exports = mongoose.model('Collection', collection);
+var collectionEntry = new Schema({
+	_modId: { type: Schema.Types.ObjectId },
+    type: {type: String},
+    slug: {type: String},
+    slug_singular: {type: String},
+    terms: [{ type: String }]
+}, { _id: false})
+
+module.exports = {
+	Collection: mongoose.model('Collection', collection),
+	CollectionEntry: mongoose.model('CollectionEntry', collectionEntry)
+}

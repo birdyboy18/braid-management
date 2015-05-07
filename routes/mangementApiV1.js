@@ -14,7 +14,7 @@ router.get('/', function(req,res){
 });
 
 //User routes
-router.get('/users/', auth.isAuthenticated, auth.isAuthorized(), user.list);
+router.get('/users/', user.list);
 router.post('/user/', user.create);
 router.put('/user/:username', auth.isAuthenticated, auth.isAuthorized(), user.update);
 router.delete('/user/:username', auth.isAuthenticated, auth.isAuthorized(), user.remove);

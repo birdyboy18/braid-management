@@ -3,11 +3,12 @@ var mongoose = require('mongoose'),
 
 var entry = new Schema({
   id: { type: String },
-  _threadId: { type: Schema.Types.ObjectId },
+  _braidId: { type: Schema.Types.ObjectId, required: true },
+  _threadId: { type: Schema.Types.ObjectId, required: true },
   service: { type: String },
   active: { type: Boolean, default: true},
   data: { type: Schema.Types.Mixed },
-  modifiers: [{ type: Schema.Types.Mixed }]
-}, { collection: 'entries'});
+  modifiers: { type: Schema.Types.Mixed, default: {} }
+}, { collection: 'entries', minimize: false});
 
 module.exports = mongoose.model('Entry', entry);

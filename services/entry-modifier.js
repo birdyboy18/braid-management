@@ -12,30 +12,35 @@ var entryModifier = {
     Models.Entry.find( { _threadId: thread._id}, function(err, entries){
       if (err) { throw err;};
 
+      function getAllMethods(object) {
+        return Object.getOwnPropertyNames(object).filter(function(property) {
+            return typeof object[property] == 'function';
+        });
+    }
+
       if (entries.length > 0) {
         //we have entries
 
         entries.map(function(entry){
-          /*
-          we need to check if the entry hasn't already had that modifier applied, or else,
-          we will be overwriting it and we don't want that if the user has filled it out
-          */
-          if (entry.modifiers.length > 0) {
-            for (var i = 0; i < entry.modifiers.length; i++) {
-                if (entry.modifiers[i]._modId.toString() != mod._id.toString()) {
-                  //add it it's not already there
-                  entry.modifiers.push(Modifier.entryDecider(mod));
-                }
-            }
+          if (entry.modifiers[mod.modifier_meta.slug]) {
+            //don't add it it exists
           } else {
-            entry.modifiers.push(Modifier.entryDecider(mod));
+            var options = {
+              _modId: mod._id,
+              type: mod.type,
+              name: mod.name,
+              slug: mod.modifier_meta.slug,
+              slug_singular: mod.modifier_meta.slug_singular
+            }
+            entry.modifiers[mod.modifier_meta.slug] = Modifier.entryDecider(options);
+            entry.markModified('modifiers');
+            
+            entry.save(function(err, Entry){
+              if (err) { throw err;};
+
+              //console.log('Modifier has sucesfully be applied to entry');
+            });
           }
-
-          entry.save(function(err, entry){
-            if (err) { throw err;};
-
-            //console.log('Modifier has sucesfully be applied to entry');
-          });
 
         });
       } else {
@@ -52,18 +57,13 @@ var entryModifier = {
 
         entries.map(function(entry){
 
-          for (var i = 0; i < entry.modifiers.length; i++) {
-            if (entry.modifiers.length === 1 && entry.modifiers[i]._modId.toString() === mod._id.toString()) {
-              entry.modifiers = [];
-            }
-            else if (entry.modifiers[i]._modId.toString() === mod._id.toString()) {
-              entry.modifiers.splice(i,1);
-            }
-          }
+        if (entry.modifiers[mod.modifier_meta.slug]) {
+          delete entry.modifiers[mod.modifier_meta.slug];
+          entry.markModified('modifiers');
+        }          
 
-          entry.save(function(err, entry){
-            if (err) { throw err;};
-
+        entry.save(function(err, entry){
+          if (err) { throw err;};
             console.log('Modifier has sucesfully been removed from the entry');
           });
         });

@@ -8,7 +8,6 @@ var user = {
   list: function(req,res) {
     User.find({},'-__v -password -_id',{}).exec(function(err, users){
       if (err) { throw err;}
-
       res.status(200).json(users);
     });
   },
@@ -18,7 +17,7 @@ var user = {
 
       if (users.length > 0) {
         //we found one, tell them it already exisits
-        res.json({
+        res.status(200).json({
           'message': 'we\'re sorry than username already exists, please pick a new one'
         });
       } else {
@@ -68,7 +67,7 @@ var user = {
 
 
 
-          res.json({
+          res.status(201).json({
             'message': 'New user sucessfully created!',
             'user': user
           });

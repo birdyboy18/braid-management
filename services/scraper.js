@@ -21,6 +21,7 @@ module.exports = function() {
       threads.map(function(thread){
           Threads.push({
             _id: thread._id,
+            _braidId: thread._braidId,
             name: thread.name,
             service: thread.service,
             modifiers: thread.modifiers,
@@ -39,7 +40,7 @@ module.exports = function() {
     var now = new Date();
     var timeSinceChecked = Math.ceil((now.getTime() - thread.last_checked.getTime())/min);
 
-    if (timeSinceChecked > 15 && thread.active === true) {
+    if (timeSinceChecked > .5 && thread.active === true) {
       console.log("needs to be scraped, last scraped was " + timeSinceChecked + " mins ago");
       return true;
     } else {
@@ -105,9 +106,11 @@ module.exports = function() {
 
               var newEntry = new Models.Entry({
                 id: result.id,
+                _braidId: thread._braidId,
                 _threadId: thread._id,
                 service: thread.service,
-                data: youtubeEntry
+                data: youtubeEntry,
+                modifiers: {}
               });
 
               newEntry.save(function(err, entry){

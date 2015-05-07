@@ -13,7 +13,7 @@ module.exports.init = function(app) {
   app.use('/api/mangement/v1/', mangementApiv1);
   app.use('/email/', emailRoutes);
   app.use('/', loginRoutes);
-  app.use('/', adminRoutes);
+  app.use('/admin', adminRoutes);
   //serve up any files in the public folder
   app.use('/public/', serveStatic(path.join(__dirname, '/public/')));
   app.use('/', serveStatic(path.join(__dirname, '/_site/')));

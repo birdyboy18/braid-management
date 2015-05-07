@@ -98,6 +98,16 @@ var thread = {
           });
       } else {
 
+        //pull the thread from any modifiers it was in
+        thread.modifiers.map(function(modifierId){
+          Models.Modifier.findById(modifierId, function(err, mod){
+            mod.threads.pull(thread._id);
+            mod.save(function(err, mod){
+              thread.modifiers.pull(mod._id);
+            });
+          })
+        });
+
         Models.Braid.findOne({ _id: thread._braidId }, function(err, braid){
           if (err) { throw err;};
 
@@ -160,7 +170,7 @@ var thread = {
               'message': 'Modifier has been sucessfully attached to the thread',
               modifier: mod,
               thread: thread
-            })
+            });
           } else {
             res.status(404).json({
               'message': 'Sorry we couldn\'t attach that modifier because it doesn\'t exists, please make sure the Modifier ID is correct'

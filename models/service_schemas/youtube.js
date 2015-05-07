@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 var youtubeMeta = new Schema({
   channel_username: { type: String, required: true },
   playlist_id: { type: String, default: ''}
-});
+}, { _id: false });
 
 var youtube = new Schema({
   id: { type: String},
@@ -46,7 +46,7 @@ var youtube = new Schema({
       height: { type: Number, default: ''}
       },
     }
-  });
+  }, { _id: false });
 
 module.exports = {
   YoutubeMeta: mongoose.model('YoutubeMeta', youtubeMeta),
