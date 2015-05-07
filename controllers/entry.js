@@ -26,18 +26,19 @@ var entry = {
         _.extend(entry, req.body);
 
         if (req.body.modifier_slug && req.body.modifier_term) {
-          console.log(entry);
+          entry.modifiers[req.body.modifier_slug].terms.push(req.body.modifier_term);
+          entry.markModified('modifiers');
         }
-        // entry.save(function(err,entry){
-        //   if (err) { res.status(400).json({
-        //     'message': err
-        //   })};
+        entry.save(function(err,entry){
+          if (err) { res.status(400).json({
+            'message': err
+          })};
 
-        //   res.json({
-        //     'message': 'entry succesfully modified',
-        //     'entry': entry
-        //   })
-        // });
+          res.json({
+            'message': 'entry succesfully modified',
+            'entry': entry
+          })
+        });
       });
     } else {
       res.status(404).json({
