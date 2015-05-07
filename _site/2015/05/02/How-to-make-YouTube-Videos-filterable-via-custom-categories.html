@@ -19,7 +19,7 @@
 
     <header class="header background--green">
   <div class="container">
-    <a href="http://localhost:8080" class="logo left">
+    <a href="/" class="logo left">
       <img src="/assets/images/logo@2x.png" alt="braid.io logo">
     </a>
     <nav class="nav right">
@@ -39,7 +39,38 @@
     </nav>
   </div>
 </header>
-
+<!-- Sign up overlay -->
+<div class="message-bar">
+  <p class="js-message">User succesfully created</p>
+</div>
+<div class="modal modal--signup">
+  <h4 class="h4 text--grey align-center">Sign Up</h4>
+  <form class="form js-signup-form">
+    <div class="input-group">
+      <label for="">Username</label>
+      <input type="text" name="username" class="js-form-username">
+    </div>
+    <div class="input-group">
+      <div class="input-group half inline-block">
+        <label for="">First Name</label>
+        <input type="text" name="firstname" class="js-form-firstname">
+      </div><div class="input-group half inline-block">
+        <label for="">Last name</label>
+        <input type="text" name="lastname" class="js-form-lastname">
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="">Email</label>
+      <input type="text" name="email" class="js-form-email">
+    </div>
+    <div class="input-group">
+      <label for="">Password</label>
+      <input type="password" name="password" class="js-form-password">
+    </div>
+    <input type="submit" value="Sign Up">
+  </form>
+</div>
+<div class="overlay"></div>
     <div class="container post">
       <h1>How To Make Youtube Videos Filterable Via Custom Categories</h1>
       <div class="post-meta">
@@ -89,7 +120,7 @@
     </div>
     <div class="left half align-center">
       <h4 class="h4 text--white">Don't forget to sign up!</h4>
-      <a href="#" class="btn btn--orange btn--big">Remember, it's free</a>
+      <a href="#" class="btn btn--orange btn--big js-sign-up">Remember, it's free</a>
     </div>
   </div>
   <div class="copyright full">
@@ -97,14 +128,18 @@
       <p class="left">&copy; 2015 Braid.io</p>
       <ul class="footer-nav right">
         <li>
-          <a href="#">Community</a>
-          <a href="#">Docs</a>
-          <a href="#">Login</a>
+          <a href="/community">Community</a>
+          <a href="/docs">Docs</a>
+          <a href="/login">Login</a>
         </li>
       </ul>
     </div>
   </div>
 </footer>
+<!-- Include scripts -->
+<script src="js/bower_components/cash/dist/cash.min.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/main.js"></script>
 
 
   </body>

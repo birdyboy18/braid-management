@@ -1,0 +1,35 @@
+{
+  "name": "cash-dom",
+  "version": "1.0.0",
+  "description": "An absurdly small jQuery alternative for modern browsers.",
+  "main": "./dist/cash.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenwheeler/cash.git"
+  },
+  "author": "Ken Wheeler <ken_wheeler@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kenwheeler/cash/issues"
+  },
+  "homepage": "https://github.com/kenwheeler/cash",
+  "scripts": {
+    "build": "gulp",
+    "test": "gulp test"
+  },
+  "devDependencies": {
+    "6to5": "^1.14.11",
+    "gulp": "~3.5.0",
+    "gulp-6to5": "^1.0.2",
+    "gulp-connect": "~1.0.0",
+    "gulp-jshint": "~1.8.4",
+    "gulp-load-plugins": "~0.3.0",
+    "gulp-preprocess": "^1.1.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-size": "~0.1.2",
+    "gulp-uglify": "~1.0.1",
+    "gulp-util": "~2.2.9",
+    "gulp-wrap": "~0.3.0"
+  },
+  "dependencies": {}
+}
