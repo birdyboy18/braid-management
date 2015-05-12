@@ -13,11 +13,22 @@ var auth = require('./controllers/auth');
 module.exports.init = function(app) {
   app.use('/api/mangement/v1/', mangementApiv1);
   app.use('/email/', emailRoutes);
+  app.get('/login/', function(req, res) {
+	var options = {
+    root: __dirname + '/views/login/',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  	};
+	res.sendFile('index.html', options);
+	});
+  app.use('/', loginRoutes);
   app.use('/admin', adminRoutes);
   app.use('/admin', auth.clientIsAuthenticated(), serveStatic(path.join(__dirname, '/views/admin/')));
   //serve up any files in the public folder
   app.use('/public/', serveStatic(path.join(__dirname, '/public/')));
   app.use('/', serveStatic(path.join(__dirname, '/_site/')));
-  app.use('/', loginRoutes);
   app.use('/docs', serveStatic(path.join(__dirname, '/views/docs/')));
 }
