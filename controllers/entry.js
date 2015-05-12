@@ -26,9 +26,19 @@ var entry = {
         _.extend(entry, req.body);
 
         if (req.body.modifier_slug && req.body.modifier_term) {
+          //get the modifier id
+          var mod_id = entry.modifiers[req.body.modifier_slug]._modId;
+          //find and update it with the same term
+          Models.Modifier.findById(mod_id, function(err, mod){
+            mod.modifier_meta.terms.push(req.body.modifier_term);
+            mod.markModified('modifier_meta');
+            mod.save();
+          });
+          //update the entries terms, mark it as modified
           entry.modifiers[req.body.modifier_slug].terms.push(req.body.modifier_term);
           entry.markModified('modifiers');
         }
+        //save the changes to the entry
         entry.save(function(err,entry){
           if (err) { res.status(400).json({
             'message': err
