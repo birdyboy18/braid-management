@@ -40,7 +40,7 @@ signUpForm.on('submit', function(e){
 
 	var formdata = JSON.stringify(data);
 
-	ajax.post('http://localhost:3000/api/mangement/v1/user', formdata, function(status, res){
+	ajax.post('http://getbraid.io/api/mangement/v1/user', formdata, function(status, res){
 		var data = JSON.parse(res);
 		if (status == 201) {
 			//succesfully created the user
@@ -50,8 +50,8 @@ signUpForm.on('submit', function(e){
 			//set a timeout and hide the bar afterwards
 			setTimeout(function(){
 				$('.message-bar').removeClass('show message-success');
-				window.location = 'http://localhost:3000/login';
-			},5000);
+				window.location = 'http://getbraid.io/login';
+			},3000);
 		} else if (status == 200) {
 			//the request was okay but it's a warning, probbaly username is taken
 			$('.js-message').text(data.message);
