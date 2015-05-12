@@ -35,7 +35,7 @@ module.exports = function(app) {
     user: config.db.user,
     pass: config.db.pass
   }
-  mongoose.connect('mongodb://localhost/braid', options);
+  mongoose.connect('mongodb://db.getbraid.io/braid', options);
   mongoose.connection.on('open', function(err){
     if (err) throw err;
 
