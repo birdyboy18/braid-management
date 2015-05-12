@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Braid.io Documentation</title>
+  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+
+  <link rel="stylesheet" href="/docs/css/style.css">
+  <link rel="canonical" href="http://getbraid.io/docs//management-api.html">
+  <link rel="alternate" type="application/rss+xml" title="Braid.io Documentation" href="http://getbraid.io/docs//feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="header">
+  <div class="container">
+    <div class="logo left">
+      <img src="assets/images/logo-big@2x.png">
+    </div>
+    <nav class="right">
+      <ul>
+        <li>
+          <a href="/docs/" >Delivery API</a>
+        </li>
+        <li>
+          <a href="/docs/management-api.html" class="current">Management API</a>
+        </li>
+        <li><a href="#">Examples</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    
+    <div class="container">
+    
+      <div class="sidebar left">
+	<ul>
+		<h3><a href="#introduction---management-api">Introduction</a></h3>
+		<li><a href="#getting-started">Getting Started</a></li>
+		<li><a href="#making-requests">Making Requests</a></li>
+		<li><a href="#available-resources">Available Resources</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#crud-operations">CRUD Operations</a></h3>
+		<li><a href="#post--update">POST &amp; UPDATE</a></li>
+		<li><a href="#delete">DELETE</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#user-resource">User</a></h3>
+		<li><a href="#post">POST</a></li>
+		<li><a href="#update">UPDATE</a></li>
+		<li><a href="#delete-1">DELETE</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#braid-resource">Braid</a></h3>
+		<li><a href="#post-1">POST</a></li>
+		<li><a href="#update-1">UPDATE</a></li>
+		<li><a href="#delete-2">DELETE</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#thread-resource">Thread</a></h3>
+		<li><a href="#post-2">POST</a></li>
+		<li><a href="#update-2">UPDATE</a></li>
+		<li><a href="#delete-3">DELETE</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#modifier-resource">Modifier</a></h3>
+		<li><a href="#post-3">POST</a></li>
+		<li><a href="#update-3">UPDATE</a></li>
+		<li><a href="#attach-a-modifier">Attach a Modifier</a></li>
+		<li><a href="#remove-a-modifier">Remove a Modifier</a></li>
+		<li><a href="#delete-4">DELETE</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#entries-resource">Entries</a></h3>
+		<li><a href="#update-4">UPDATE</a></li>
+		<li><a href="#delete-5">DELETE</a></li>
+	</ul>
+
+
+</div>
+    
+
+      <div class="main">
+        <div class="content">
+          <h2 id="introduction---management-api">Introduction - Management API</h2>
+
+<p>Welcome to the braid documentation. The first part of the docs will explain to you how to use the Management API, the resources that are available to you and the type of requests you can make to manage content.</p>
+
+<h3 id="getting-started">Getting Started</h3>
+
+<p>To start using the API, all your requests must be based on the following url, if you don’t include the base url, you’ll be faced with a 404 error status.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://getbraid.io/api/management/v1/:resource/:resource_id&#39;</code></pre></div>
+
+<p>Anything after that will be a resource. To see what resources are available and what you can do with them please continue further down into the documentation. They typically follow a pattern of the resource and a resource ID, if you have it. This will allow you to edit or delete the exact entry.</p>
+
+<h3 id="making-requests">Making Requests</h3>
+
+<p>In order to make requests, you must first have a user account and know it’s username and password. Every route and resource is authenticated via Basic Auth and your username and password is needed on every request to the management API. If you simply want to query data then please use the <a href="/docs">Delivery API</a>, it was made for that very reason and doesn’t require any authentication to use.</p>
+
+<p>Once your request is authenticated it is checked to see if you are authorised for the action you are trying to perform. If you are not authorized to perform that action then you shall receive a 403 forbidden.</p>
+
+<p>As a quick example you couldn’t delete another person’s braid, only your own. The only way you could do that is if you were an admin, because admins are authorised.</p>
+
+<p>The API accepts request types of <code>POST</code> <code>PUT</code> and <code>DELETE</code>. To see what you can do on each resource please, refer to documentation further down the page.</p>
+
+<h3 id="available-resources">Available Resources</h3>
+
+<p>The Management API provides you with the ability to request using the above HTTP Verbs to 5 types of resources, these are as follows.</p>
+
+<ul>
+  <li><a href="#user-resource">user</a></li>
+  <li><a href="#braid-resource">braid</a></li>
+  <li><a href="#thread-resource">thread</a></li>
+  <li><a href="#modifier-resource">modifier</a></li>
+  <li><a href="#entries-resource">entries</a></li>
+</ul>
+
+<h2 id="crud-operations">CRUD Operations</h2>
+
+<h3 id="post--update">Post &amp; Update</h3>
+
+<p>When performing basic CRUD operations, the API accepts a two type of data encoding, these are <code>x-www-form-urlencoded</code> and raw json or <code>application/json</code>. To make sure the server knows what to do, please make sure that you send over request headers with a content-type that matches either one.</p>
+
+<p>When a <code>POST</code> or <code>PUT</code> request is successful, the response is the new resource that you just requested to edit.</p>
+
+<h3 id="delete">Delete</h3>
+
+<p>When deleting a resource, the resource is never returned instead a response message is sent telling you that it was successfully deleted.</p>
+
+<p>For a complete breakdown of what each resource expects from a request please refer to the appropriate resources documentation. This is further down the page.</p>
+
+<h2 id="user-resource">User Resource</h2>
+
+<p>A User resource is what is needed to create braids and other resource. Because you need to authenticate on every route a user <code>POST</code> requests to a user resource, it is actually un-authenticated. </p>
+
+<p>To make sure people don’t mess around too much an email is sent to the email address and asked to verify it. If not the system will clean up any accounts and delete accounts that haven’t been verified after a set amount of time.</p>
+
+<h3 id="post">POST</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">POST &#39;http://getbraid.io/api/management/v1/user&#39;</code></pre></div>
+
+<p>When creating a new user, there are set fields that are required in order to succesfully make a new user. They are as following;</p>
+
+<ul>
+  <li>username</li>
+  <li>email</li>
+  <li>firstName</li>
+  <li>lastName</li>
+  <li>password</li>
+</ul>
+
+<p>As an example of a request lets submit a post request using javascript. For brevity lets assume you have an AJAX library of choice. I’m going to use <a href="http://visionmedia.github.io/superagent/">SuperAgent</a>.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//set up our data</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">username</span><span class="o">:</span> <span class="s1">&#39;catlover72&#39;</span><span class="p">,</span>
+	<span class="nx">email</span><span class="o">:</span> <span class="s1">&#39;toby@example.com&#39;</span><span class="p">,</span>
+	<span class="nx">firstName</span><span class="o">:</span> <span class="s1">&#39;Toby&#39;</span><span class="p">,</span>
+	<span class="nx">lastName</span><span class="o">:</span> <span class="s1">&#39;Jenkins&#39;</span><span class="p">,</span>
+	<span class="nx">password</span><span class="o">:</span> <span class="s1">&#39;ireallylovecats&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/user&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>If all is successful you should end up with a response that looks like the following, that user now exists within braid and you can use that to start creating braids and doing all the cool things it lets you do. However you don’t have to create a user this way you can just use the signup form at <a href="http://getbraid.io">getbraid.io</a>.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;firstName&quot;</span><span class="p">:</span> <span class="s2">&quot;Toby&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;lastName&quot;</span><span class="p">:</span> <span class="s2">&quot;Jenkins&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;toby@example.com&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="nt">&quot;braids&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="nt">&quot;verified&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-06T20:23:58.003Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;last_logged_in&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-06T20:23:58.003Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="update">UPDATE</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/user/:username&#39;</code></pre></div>
+
+<p>Update is very similar to POST, you can easily just update only the selected properties, through just using a json object like before.</p>
+
+<p>Toby got married and has decided to take his partners surname. Lets update it.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//set up our data</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">lastName</span><span class="o">:</span> <span class="s1">&#39;catistinia&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;/user/catlover72&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+
+<span class="c1">//or</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;/user/catlover72&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">({</span> <span class="nx">lastName</span><span class="o">:</span> <span class="s1">&#39;catistinia&#39;</span><span class="p">})</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>You can see it’s super easy to update certain parts. It’s recommended you don’t try and update threads or braids. They will automatically be updated when you post to those resources, and if you do it might mess with things.</p>
+
+<h3 id="delete-1">DELETE</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">DELETE &#39;http://getbraid.io/api/management/v1/user/:username&#39;</code></pre></div>
+
+<p>To <code>DELETE</code> a resource you need to target it with it’s unique identify, in most resources that would be <code>_id</code> for a user the unique value is the <code>username</code></p>
+
+<p>To delete toby, or catlover72 we would send the following request.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">request</span>
+<span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="s1">&#39;/user/catlover72&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>And just like that poof, catlover72 is gone.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="s2">&quot;User: catlover72 has been removed&quot;</span></code></pre></div>
+
+<h2 id="braid-resource">Braid Resource</h2>
+
+<p>A braid resource is what you use to expose threads of content. A braid is a handy way of grouping related threads of content together from different places but allow you to tie it all in and expose at one point.</p>
+
+<p>A braid doesn’t need much to be made, jsut a name and a description.</p>
+
+<h3 id="post-1">POST</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">POST &#39;http://getbraid.io/api/management/v1/braid&#39;</code></pre></div>
+
+<p>When making a braid the required fields and data is as follows;</p>
+
+<ul>
+  <li>name</li>
+  <li>description</li>
+</ul>
+
+<p>That’s all you need to make a braid, just make sure you’re authenticated, or else you’ll just keep getting 401 unauthorized error.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//set up data</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Cat Braid&#39;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;A braid dedicated to all things cats&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/braid&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>and the response should look like this</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Cat Braid&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A braid dedicated to all things cats&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-06T20:57:24.801Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;last_modified&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-06T20:57:24.801Z&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="update-1">Update</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/braid/:braid_id&#39;</code></pre></div>
+
+<p>When updating a braid it is really only needed if you want to change the name or description of it to make it more recognisable or related to the content it contains. Don’t update the threads, the system will do that when you create a new thread.</p>
+
+<h3 id="delete-2">Delete</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">DELETE &#39;http://getbraid.io/api/management/v1/braid/:braid_id&#39;</code></pre></div>
+
+<p>Deleting a braid is just like deleting any other resource, simply provide it’s unique identifier and use a <code>DELETE</code> request to that endpoint and it will simply disappear. If the braid has any threads in it, they will also be deleted.</p>
+
+<h2 id="thread-resource">Thread Resource</h2>
+
+<p>Threads are set up using a specific service. When you specify a source of content for a thread it will then periodically scrape it keeping up to date with any of the content that is added to that source.</p>
+
+<h3 id="post-2">POST</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">POST &#39;http://getbraid.io/api/management/v1/thread/?braidId=:braid_id&#39;</code></pre></div>
+
+<p>When creating a braid resource, the folowing fields / details are needed;</p>
+
+<ul>
+  <li>name</li>
+  <li>description</li>
+  <li>service</li>
+  <li>username / unique identifier</li>
+  <li>braidId (query parameter)</li>
+</ul>
+
+<p>The username / unique identifier is dependant upon what service being used. Since braid only works with YouTube at the moment, all that is required is a channel username, then all public videos will be pulled into the braid, where they can then be further edited and modified using <a href="#modifier-resource">modifiers</a>.</p>
+
+<p>When a thread is made it must also be assigned to a braid to do that provide a <code>braidId</code> as a query parameter</p>
+
+<p>To make it clear, lets make one.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//set up data</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Simon the Cat&#39;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;All the public videos from the simon the cats youtube channel&#39;</span><span class="p">,</span>
+	<span class="nx">service</span><span class="o">:</span> <span class="s1">&#39;youtube&#39;</span><span class="p">,</span>
+	<span class="nx">username</span><span class="o">:</span> <span class="s1">&#39;simonthecat&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/thread?braidId=554a8034dfd1a2521ce4a179&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>If sucessful, you should end up with a request that looks like the following.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Thread successfully added to braid, references have been added&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;braid&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Cat Braid&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A braid dedicated to all things cats&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-06T20:57:24.801Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;last_modified&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-06T20:57:24.801Z&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;thread&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Simon the Cat&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;All the public videos from the simon the cats youtube channel&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;channel_username&quot;</span><span class="p">:</span> <span class="s2">&quot;simonthecat&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="nt">&quot;entries&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="nt">&quot;last_checked&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-11T17:13:26.402Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;poll_time&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<p>You can see that the system has done quite a bit of work for you and that the braid now has the thread id that you just created in the threads property.</p>
+
+<p>You can also see the thread has the <code>_braidId</code> equal to the braidId we added when creating the resource.</p>
+
+<h3 id="update-2">UPDATE</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/thread/:thread_id&#39;</code></pre></div>
+
+<p>It’s possible to update threads, when you do, it’s recommended you only update, the name or description. If you want to change the source of content. Then please <code>delete</code> the thread and then create a new one, with the correct username for the channel you wish to pull data from.</p>
+
+<h3 id="delete-3">DELETE</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">DELETE &#39;http://getbraid.io/api/management/v1/thread/:thread_id&#39;</code></pre></div>
+
+<p>To delete a thread, simply provide its <code>_id</code> and hit the API endpoint. The system will take care of the rest. That includes removing the reference from the braid and deleting any entries it had scraped from the source.</p>
+
+<h2 id="modifier-resource">Modifier Resource</h2>
+
+<p>Modifiers are applied to threads. The system will loop through every entry in the thread you’ve attached a modifier to, and then attach the modifier to the entries. To do this there is an additional API endpoint to hit that will help with this.</p>
+
+<p>Currently there is only one type of modifier, it is know as a collection type modifier and allows you to group similar entries in a thread together.</p>
+
+<p>The same modifier can be applied to multiple threads.</p>
+
+<h3 id="post-3">POST</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">POST &#39;http://getbraid.io/api/management/v1/modifier&#39;</code></pre></div>
+
+<p>When creating a modifier there are certain required fields to make one. They are as follows;</p>
+
+<ul>
+  <li>name</li>
+  <li>description</li>
+  <li>type</li>
+  <li>slug</li>
+  <li>slug_plural</li>
+</ul>
+
+<p>The type and slug is important, because later on these are used in the <a href="/">Delivery API</a>. To allow you to query entries based on the slug and any terms you have added.</p>
+
+<p>To make it easier, lets make a modifier for catlover72</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//set up data</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Allow to group entries based on similar terms&#39;</span><span class="p">,</span>
+	<span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;collection&#39;</span><span class="p">,</span>
+	<span class="nx">slug</span><span class="o">:</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span>
+	<span class="nx">slug_plural</span><span class="o">:</span> <span class="s1">&#39;tag&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/modifier&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>If all is correct then you should see a response similar to the following.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;553d63a24e31e84061cf923c&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow to group entries based on similar terms&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;modifier_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;slug_singular&quot;</span><span class="p">:</span> <span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[]</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span></code></pre></div>
+
+<h2 id="update-3">UPDATE</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/modifier/:modifier_id&#39;</code></pre></div>
+
+<p>To update a modifier, then simply send the required changes to the API endpoint above. This is really only useful for updating the name and description. </p>
+
+<p>If you’re trying to change the type of modifier or change the slug then it’s best to delete it and then make a new one.</p>
+
+<p>If you’re trying to add new terms to a collection type modifier. It’s best to update an entry within a thread that has had that modifier applied to it. This is because when the terms for a specific entry are updated, the term is also added to the related modifier automatically. See <a href="#entries-resource">entries</a> for more info.</p>
+
+<h2 id="attach-a-modifier">Attach a Modifier</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/attach/modifier/:modifier_id/to/thread/:thread_id&#39;</code></pre></div>
+
+<p>When you want to attach a modifier to a thread, use this url. Replace the IDs with the desired IDs and then the system will add references to each resource automatically. The system will also apply the correct modifier meta data to the modifiers property of each entry in the thread.</p>
+
+<p>To make it clearer here is an example.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">request</span>
+<span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;/attach/modifer/553d63a24e31e84061cf923c/to/thread/554a818f6eda17d33587e567&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>You should then get a response like so</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Modifier has been sucessfully attached to the thread&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;modifier&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;553d63a24e31e84061cf923c&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow to group entries based on similar terms&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;modifier_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;slug_singular&quot;</span><span class="p">:</span> <span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">220</span><span class="p">,</span>
+    <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;thread&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;catlover72&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Simon the Cat&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;All the public videos from the simon the cats youtube channel&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;channel_username&quot;</span><span class="p">:</span> <span class="s2">&quot;simonthecat&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;553d63a24e31e84061cf923c&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;entries&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;...&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;last_checked&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-11T17:13:26.402Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;poll_time&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="remove-a-modifier">Remove a Modifier</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/remove/modifier/:modifier_id/from/thread/:thread_id&#39;</code></pre></div>
+
+<p>You also have the ability to remove a modifier from a thread, in a similar way to how you attach one. Once this is run, the system will automatically loop through the entries and remove the modifier from them, leaving no trace that a modifier had even been applied to them in the first place.</p>
+
+<h3 id="delete-4">DELETE</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">DELETE &#39;http://getbraid.io/api/management/v1/modifier/:modifier_id&#39;</code></pre></div>
+
+<p>Just like the deleting of all resource, simply provide the resources exact <code>_id</code> as a request parameter and it will be automatically remove from the system.</p>
+
+<h2 id="entries-resource">Entries Resource</h2>
+
+<p>An entry varies in the data that it has, the system tries it’s best to put the data in the most standard format possible. To make it easier to access common data properties.</p>
+
+<p>An entry is created based on the service it was pulled from and is automatically filled with the data scraped from the source.</p>
+
+<h3 id="post-4">POST</h3>
+
+<p>You don’t create an entry it’s automatically made by the system when a thread is created and a source of content is successfully added.</p>
+
+<h3 id="update-4">UPDATE</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">PUT &#39;http://getbraid.io/api/management/v1/entries/entry_id&#39;</code></pre></div>
+
+<p>To update an entry it follows the same specification as all the other update routes. The difference is that when you update an entry you’re normally trying to update the part where you applied the modifier. </p>
+
+<p>To do that you need to make sure you select the following properties to update. Since only one modifier type exists at the moment. You would want to update the terms of a collection type. You’d need to update the following.</p>
+
+<ul>
+  <li>modifier_slug</li>
+  <li>modifier_term</li>
+</ul>
+
+<p>Here is an example</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//set up data</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">modifier_slug</span><span class="o">:</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span>
+	<span class="nx">modifier_term</span><span class="o">:</span> <span class="s1">&#39;fluffy&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">request</span>
+<span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;/entries/554b7c7f0f9c288477c26780&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;catlover72&#39;</span><span class="p">,</span><span class="s1">&#39;ireallylovecats&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span></code></pre></div>
+
+<p>and then you’d end up with a response similar to this</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554b7c7f0f9c288477c26780&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;thumbnails&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/default.jpg&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">90</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;medium&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/mqdefault.jpg&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">180</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;high&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/hqdefault.jpg&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">480</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">360</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;standard&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/sddefault.jpg&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">640</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">480</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;maxres&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="kc">null</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Javascript Selectors - Javascript Tutorial for Beginners With Examples&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCVTlvUkGslCV_h-nSAId8Sw&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-04-21T15:59:01.000Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;W3EK4MlZW4g&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="nt">&quot;slug_singular&quot;</span><span class="p">:</span> <span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;_modId&quot;</span><span class="p">:</span> <span class="s2">&quot;553d63a24e31e84061cf923c&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="delete-5">DELETE</h3>
+
+<p>There isn’t really a proper way to delete an entry since if you did, it would simply get re-added on the next scrape by the system. </p>
+
+<p>To stop an entry from appearing in results, there is a handy active property. If you set that to false, then only entries that have active set to true can be returned.</p>
+
+<h2 id="finished">Finished</h2>
+
+<p>Thank you for reading the documentation for the Management API, I really hope it’s useful. if you were wondering how to <code>GET</code> data then please refer to the <a href="/">Delivery API</a>. </p>
+
+<p>If you like the looks of braid and want to try it out then feel free to head over to <a href="http://getbraid.io">getbraid.io</a> and signup. </p>
+
+<p>If you want to see it doing its magic then please check out the <a href="#">example</a>.</p>
+
+        </div>
+      </div>
+    </div>
+
+    <footer>
+  <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var sidebar = $('.sidebar');
+    var header = $('.header');
+    var $window = $(window);
+
+    $window.scroll(function(){
+      if ($window.scrollTop() >= header.innerHeight()) {
+        sidebar.addClass('fixed');
+      } else {
+        sidebar.removeClass('fixed');
+      }
+    });
+  });
+  </script>
+</footer>
+
+
+  </body>
+
+</html>

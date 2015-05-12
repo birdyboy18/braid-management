@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Braid.io Documentation</title>
+  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+
+  <link rel="stylesheet" href="/docs/css/style.css">
+  <link rel="canonical" href="http://getbraid.io/docs//">
+  <link rel="alternate" type="application/rss+xml" title="Braid.io Documentation" href="http://getbraid.io/docs//feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="header">
+  <div class="container">
+    <div class="logo left">
+      <img src="assets/images/logo-big@2x.png">
+    </div>
+    <nav class="right">
+      <ul>
+        <li>
+          <a href="/docs/" class="current">Delivery API</a>
+        </li>
+        <li>
+          <a href="/docs/management-api.html" >Management API</a>
+        </li>
+        <li><a href="#">Examples</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    
+    <div class="container">
+    
+      <div class="sidebar left">
+	<ul>
+		<h3><a href="#introduction---delivery-api">Introduction</a></h3>
+		<li><a href="#getting-started">Getting Started</a></li>
+		<li><a href="#making-requests">Making Requests</a></li>
+		<li><a href="#available-resources">Available Resources</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#url-parameters">URL Parameters</a></h3>
+		<li><a href="#exclude-parameter">Exclude</a></li>
+		<li><a href="#populate-parameter">Populate</a></li>
+		<li><a href="#limit--skip-parameters">Limit &amp; Skip</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#user-resource">User</a></h3>
+		<li><a href="#populatable-fields">Populatable Fields</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#braid-resource">Braid</a></h3>
+		<li><a href="#query-parameters">Query Parameters</a></li>
+		<li><a href="#populatable-fields-1">Populatable Fields</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#thread-resource">Thread</a></h3>
+		<li><a href="#query-parameters-1">Query Parameters</a></li>
+		<li><a href="#populatable-fields-2">Populatable Fields</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#modifier-resource">Modifier</a></h3>
+		<li><a href="#query-parameters-2">Query Parameters</a></li>
+		<li><a href="#populatable-fields-3">Populatable Fields</a></li>
+	</ul>
+
+	<ul>
+		<h3><a href="#entries-resource">Entries</a></h3>
+		<li><a href="#query-parameters-3">Query Parameters</a></li>
+		<li><a href="#populatable-fields-4">Populatable Fields</a></li>
+		<li><a href="#find-by-modifier">Find By Modifier</a></li>
+	</ul>
+
+</div>
+    
+
+      <div class="main">
+        <div class="content">
+          <h2 id="introduction---delivery-api">Introduction - Delivery API</h2>
+
+<p>Welcome to the braid documentation. The first part of the docs will explain to you how to use the delivery API, the resources that are available to you and the URL Parameters that are made available in order to access the information you want from Braid.</p>
+
+<h3 id="getting-started">Getting Started</h3>
+
+<p>To start using the Braid Delivery API, there is a base route that all of the requests must go through. If you don’t provide the base route then the server will reply with a 404 not found error. The base route is as follows:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/:resource/:resource_id&#39;</code></pre></div>
+
+<p>Anything after that will be a resource, to see what resources are available and what you can do with them please continue further down into the documentation. They typically follow a pattern of the resource and a resource ID, if you have it. This will return the exact entry.</p>
+
+<p>The API also has generic query parameters available on all requests which will help control the data you request. See <a href="#url-parameters">URL Parameters</a> for more.</p>
+
+<h3 id="making-requests">Making Requests</h3>
+
+<p>The API will only accept <code>GET</code> requests. If you want to manage or edit your content, then you’re going to need to use the <a href="'/management-api.html'">Management API</a>.</p>
+
+<p>When the data is returned it will always return JSON as this is one of the most popular way of presenting data. There isn’t currently anyway of returning XMl or other data formats. No jsonp callback is provided either.</p>
+
+<p>When requesting from the Delivery API there is no authentication needed; because of this, any personal information about a user is also automatically not included in any responses. This includes first name, last name, email and password. For extra security the password is hashed and salted too, so the password is secure even in the event of a database break in.</p>
+
+<h3 id="available-resources">Available Resources</h3>
+
+<p>The Delivery API provides you with the ability to request 5 types of resources, these are as follows.</p>
+
+<ul>
+  <li><a href="#user-resource">user</a></li>
+  <li><a href="#braid-resource">braid</a></li>
+  <li><a href="#thread-resource">thread</a></li>
+  <li><a href="#modifier-resource">modifier</a></li>
+  <li><a href="#entries-resource">entries</a></li>
+</ul>
+
+<h2 id="url-parameters">URL Parameters</h2>
+
+<p>For every request there are helpful URL Parameters you can add. These allow you to have more control over that data you receive back in requests.</p>
+
+<h3 id="exclude-parameter">Exclude Parameter</h3>
+
+<p>The exclude parameter allows you to exclude properties that you don’t want back, from a request through a space separated list. This is helpful because it’s less data to be sent over in a request and also means less JSON to look through. Look at the example below.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+		<span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554b7c7f0f9c288477c26780&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+			<span class="nt">&quot;thumbnails&quot;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="nt">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+					<span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/default.jpg&quot;</span><span class="p">,</span>
+					<span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+					<span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">90</span>
+				<span class="p">},</span>
+				<span class="nt">&quot;medium&quot;</span><span class="p">:</span> <span class="p">{</span>
+					<span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/mqdefault.jpg&quot;</span><span class="p">,</span>
+					<span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span>
+					<span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">180</span>
+				<span class="p">},</span>
+				<span class="nt">&quot;high&quot;</span><span class="p">:</span> <span class="p">{</span>
+					<span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/hqdefault.jpg&quot;</span><span class="p">,</span>
+					<span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">480</span><span class="p">,</span>
+					<span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">360</span>
+				<span class="p">},</span>
+				<span class="nt">&quot;standard&quot;</span><span class="p">:</span> <span class="p">{</span>
+					<span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://i.ytimg.com/vi/W3EK4MlZW4g/sddefault.jpg&quot;</span><span class="p">,</span>
+					<span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">640</span><span class="p">,</span>
+					<span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">480</span>
+				<span class="p">},</span>
+				<span class="nt">&quot;maxres&quot;</span><span class="p">:</span> <span class="p">{</span>
+					<span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+					<span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+					<span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="kc">null</span>
+				<span class="p">}</span>
+			<span class="p">},</span>
+			<span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;In this Javascript tutorial for beginners, we&#39;re going to be using Javascript selectors to access the DOM (document object model) and interact with our webpage in realtime. Selectors allow us to search for elements in the web page, get those html elements, and do things with them.\ \ Selector methods are:\ document.getElementsByTagName(&#39;div&#39;)\ document.getElementsByClassName(&#39;done&#39;)\ document.getElementById(&#39;my-id&#39;)\ document.querySelector(&#39;#my-id&#39;)\ document.querySelectorAll(&#39;.classname&#39;)\ \ Once you have selected an html element, you can modify it:\ document.getElementById(&#39;my-id&#39;).innerHTML = \&quot;new html\&quot;\ document.getElementById(&#39;my-id&#39;).className = \&quot;newclass otherclass\&quot;\ \ Hopefully you liked this javascript tutorial for beginners with examples (hopefully you like every web development tutorial I crank out)\ As you can see, selectors are powerful in Javascript and even if you&#39;re a javascript beginner, you can make any and every change to your web page.&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Javascript Selectors - Javascript Tutorial for Beginners With Examples&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+			<span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+			<span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCVTlvUkGslCV_h-nSAId8Sw&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-04-21T15:59:01.000Z&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;W3EK4MlZW4g&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span>
+		<span class="p">},</span>
+		<span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">{},</span>
+		<span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+	<span class="p">}</span></code></pre></div>
+
+<p>You can see that sometimes requests are quite big, it’d be handy if we didn’t need the data, you can simply put <code>data</code> in the exclude parameter and then it won’t be returned. You’ll end up with a request thats much smaller in size.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/554b7c7f0f9c288477c26780?exclude=data&#39;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554b7c7f0f9c288477c26780&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Exclude is quite powerful, it’s also possible to exclude nested properties. Going back to the first request it’s possible to exclude the thumbnails in data and still return everything else in the data property. You can do this by using dot notation, similar to how you would access object properties in JavaScript.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/554b7c7f0f9c288477c26780?exclude=data.thumbnails&#39;</code></pre></div>
+
+<p>and the request response would look like this</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+		<span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554b7c7f0f9c288477c26780&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+			<span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;In this Javascript tutorial for beginners, we&#39;re going to be using Javascript selectors to access the DOM (document object model) and interact with our webpage in realtime. Selectors allow us to search for elements in the web page, get those html elements, and do things with them.\ \ Selector methods are:\ document.getElementsByTagName(&#39;div&#39;)\ document.getElementsByClassName(&#39;done&#39;)\ document.getElementById(&#39;my-id&#39;)\ document.querySelector(&#39;#my-id&#39;)\ document.querySelectorAll(&#39;.classname&#39;)\ \ Once you have selected an html element, you can modify it:\ document.getElementById(&#39;my-id&#39;).innerHTML = \&quot;new html\&quot;\ document.getElementById(&#39;my-id&#39;).className = \&quot;newclass otherclass\&quot;\ \ Hopefully you liked this javascript tutorial for beginners with examples (hopefully you like every web development tutorial I crank out)\ As you can see, selectors are powerful in Javascript and even if you&#39;re a javascript beginner, you can make any and every change to your web page.&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Javascript Selectors - Javascript Tutorial for Beginners With Examples&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+			<span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+			<span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCVTlvUkGslCV_h-nSAId8Sw&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-04-21T15:59:01.000Z&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;W3EK4MlZW4g&quot;</span><span class="p">,</span>
+			<span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span>
+		<span class="p">},</span>
+		<span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">{},</span>
+		<span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+	<span class="p">}</span></code></pre></div>
+
+<p>you could even exclude thumbnails and the description</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/554b7c7f0f9c288477c26780?exclude=data.thumbnails data.description&#39;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554b7c7f0f9c288477c26780&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Javascript Selectors - Javascript Tutorial for Beginners With Examples&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCVTlvUkGslCV_h-nSAId8Sw&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-04-21T15:59:01.000Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;W3EK4MlZW4g&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="populate-parameter">Populate Parameter</h3>
+
+<p>Populate allows you to populate content of certain fields, if they are able to be populated. Populate can be used the same way as exclude. You provide a space separated list and then the request will then include the populated data, for a full list of populatable fields please refer to the populate section for each resource.</p>
+
+<p>Here is a quick example of data that hasn’t been populated and then has been.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/user/demo&#39;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9a90efa011ddb52c5d97&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;554f9b89efa011ddb52c5d9b&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;braids&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;verified&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;last_logged_in&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>You can use populate to populate and see what modifiers this user has, without looking up the modifiers directly. It is as simple as the following;</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/user/demo?populate=modifiers&#39;</code></pre></div>
+
+<p>Then we will recieve a request as follows</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9a90efa011ddb52c5d97&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9b89efa011ddb52c5d9b&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Used to categorise content&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;modifier_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;slug_singular&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[]</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+      <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;braids&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;verified&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;last_logged_in&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="limit--skip-parameters">Limit &amp;&amp; Skip Parameters</h3>
+
+<p>The limit and skip parameter, while they can be used on their own. They are much more suited to be used together. The parameters do exactly what they sound like. They allow you to skip and limit how many results are returned from a query. It essentially allows you to paginate through results, but is flexible enough to be decided by the person writing the logic.</p>
+
+<p>These parameters can be used on all requests, to any resource but are really only helpful when querying entries from either a thread or a braid. </p>
+
+<p>Lets try it out.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/?braidId=554f9ac0efa011ddb52c5d99<span class="err">&amp;</span>exclude=data.thumbnails data.description modifiers<span class="err">&amp;</span>limit=2&#39;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00de590c4c8c59e9d85&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfFztjI0GitMIC5eTSYPOA0K&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;JUMP TV Cultural Invasion: Chinese New Year 2015&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCWlyjYJT4f18z6n3PjopdGA&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-03-03T15:52:27.000Z&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;rM67STB43ZM&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfFztjI0GitMIC5eTSYPOA0K&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00de590c4c8c59e9d86&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfFn4RD1Om5rnybYvdtrayA5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Jump Music Fix - 13th February&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCWlyjYJT4f18z6n3PjopdGA&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-02-13T17:53:35.000Z&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;H3hqN5nMcvM&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfFn4RD1Om5rnybYvdtrayA5&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></div>
+
+<p>Here we end up with the result of 2 entries from the queried braid, now we can skip the first one and still limit it. To allow us to grab the second and third entry, instead of the first 2.</p>
+
+<p>You should be able to clearly see that the first result above has been replaced with the second and we also have what appears to be a new entry.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/?braidId=554f9ac0efa011ddb52c5d99<span class="err">&amp;</span>exclude=data.thumbnails data.description modifiers<span class="err">&amp;</span>limit=2<span class="err">&amp;</span>skip=1&#39;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00de590c4c8c59e9d86&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfFn4RD1Om5rnybYvdtrayA5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Jump Music Fix - 13th February&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCWlyjYJT4f18z6n3PjopdGA&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-02-13T17:53:35.000Z&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;H3hqN5nMcvM&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfFn4RD1Om5rnybYvdtrayA5&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00de590c4c8c59e9d87&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfErCbmxXqZOakytgH7Xbaow&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Jump TV News Round Up&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCWlyjYJT4f18z6n3PjopdGA&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-01-28T20:27:46.000Z&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;kfeXWt7Ztl0&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UU8YU_w1S4CfErCbmxXqZOakytgH7Xbaow&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></div>
+
+<h2 id="user-resource">User Resource</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/user/:username&#39;</code></pre></div>
+
+<p>The user resource provides you with information on what modifiers a user has made and what braids they own. By simply replacing <code>:username</code> with a username you know exists (your own one perhaps?). You’ll now be able to see what data is stored by that user.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9a90efa011ddb52c5d97&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;554f9b89efa011ddb52c5d9b&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;braids&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;verified&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;last_logged_in&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="populatable-fields">Populatable fields</h3>
+
+<p>To save manual ‘look ups’ you can include a populate <a href="#url-parameters">URL query parameter</a> that will automatically look up other resources based on the id. The populatable fields for a user resource are <code>braids</code> and <code>modifiers</code>. Simply provide it as a query parameter like so;</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/user/demo?populate=braids modifiers&#39;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9a90efa011ddb52c5d97&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9b89efa011ddb52c5d9b&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Used to categorise content&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;modifier_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;slug_singular&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[]</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+      <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;braids&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554f9ac0efa011ddb52c5d99&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;_userId&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;demo braid&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A braid used for demos&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+      <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;554fa00ae590c4c8c59e9d81&quot;</span>
+      <span class="p">],</span>
+      <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:52:00.659Z&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_modified&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:52:00.659Z&quot;</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;verified&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;last_logged_in&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T17:51:12.335Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Now you’ve looked up two additional resource without the need to do it manually. Handy Ay’.</p>
+
+<h2 id="braid-resource">Braid Resource</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/braid/:braid_id&#39;</code></pre></div>
+
+<p>A braid is responsible for storing all the threads and incidentally all of the entries contained within those threads. A braid is an entry point for grabbing all the entries from an entire braid, which would result in a mixture of entry types. If you wanted to be able to grab entries from a certain thread have a look at the <a href="#entries-resource">entries resource</a>.</p>
+
+<h3 id="query-parameters">Query parameters</h3>
+
+<h4 id="username"><code>username</code></h4>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/braid/?username=:username&#39;</code></pre></div>
+
+<p>Besides providing the direct <code>:braid_id</code> to a braid resource it’s also possible to use a query parameter to request all the braids belonging to a certain user.</p>
+
+<h3 id="populatable-fields-1">Populatable fields</h3>
+
+<p>Braids only have one available populatable field, and that is <code>threads</code>. Provide threads as a value for the populate query parameter and you will be supplied with a response that contains the braid details and the data of the threads.</p>
+
+<h2 id="thread-resource">Thread Resource</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/thread/:thread_id&#39;</code></pre></div>
+
+<p>Thread resources contain entries from a specified source of data. Currently that would only be YouTube as this is the only API it knows how to scrape at the moment. To request it, you provide the <code>:thread_id</code> and you’ll be given the information on that thread including an array of entries that it has a reference too.</p>
+
+<h3 id="query-parameters-1">Query Parameters</h3>
+
+<h4 id="braidid"><code>braidId</code></h4>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/thread/?braidId=:braid_id&#39;</code></pre></div>
+
+<p>Threads can be queried for based on two other resources, one of these is a <code>braid</code>.</p>
+
+<h4 id="username-1"><code>username</code></h4>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/thread/?username=:username&#39;</code></pre></div>
+
+<p>You can also query a thread based on what user it belongs to through the <code>username</code> url parameter.</p>
+
+<h3 id="populatable-fields-2">Populatable Fields</h3>
+
+<p>The only available populatable field for a thread is the <code>entries</code>, it will then return every single entry. It’s not really recommended but the option is still there if you wanted. Simply provide entries in the populate query parameter and then wait around as the server does a roundtrip to fetch each entry in the entries array.</p>
+
+<h2 id="modifier-resource">Modifier Resource</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/modifier/:modifier_id&#39;</code></pre></div>
+
+<p>Modifiers are resources that are based from different pre-determined types. The idea of a modifier is being able to quickly add certain data type to a thread and directly affect the entries that it references. At the moment there is only one modifier type. This modifier type is a collection modifier. This allows you to emulate the ability to add categories or tags and group related entries together.</p>
+
+<h3 id="query-parameters-2">Query Parameters</h3>
+
+<h4 id="username-2"><code>username</code></h4>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/modifier?username=:username&#39;</code></pre></div>
+
+<p>Just like with both <code>braid</code> and <code>thread</code> resources, you can also list all the modifiers a user has by passing the username to the <code>username</code> query parameter.</p>
+
+<h3 id="populatable-fields-3">Populatable Fields</h3>
+
+<p>The only populatable field that is available for a modifier is <code>threads</code>.</p>
+
+<h2 id="entries-resource">Entries Resource</h2>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/:entry_id&#39;</code></pre></div>
+
+<p>Entries are the data that are pulled from the service using whatever username / unique identify that was made when creating the thread. Currently it only works with YouTube so you would provide a channel username. All entries belonging to the thread would have originally been pulled from the channel that you specified.</p>
+
+<p>To request one entry, you simply provide the <code>entry_id</code> as show as above.</p>
+
+<h3 id="query-parameters-3">Query Parameters</h3>
+
+<p>When it comes to finding entries there are quite a few different ways you can query for entries.</p>
+
+<h4 id="braidid-1"><code>braidId</code></h4>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/?braidId=:braid_id&#39;</code></pre></div>
+
+<p>You can choose to get all the entries from a braid, this means that if you had 3 threads in one braid. You would grab all the entries from each of the threads.</p>
+
+<h4 id="threadid"><code>threadId</code></h4>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/?threadId=thread_id&#39;</code></pre></div>
+
+<p>To limit your entries to just one thread then you can specify a <code>threadId</code> instead of a <code>braidId</code> to request all the entries from a specific thread.</p>
+
+<h3 id="populatable-fields-4">Populatable Fields</h3>
+
+<p>Entries have no populatable fields, this is due to an entry’s structure changing so much. An entry will have a different structure based on the service it is pulled from.</p>
+
+<h3 id="find-by-modifier">Find by Modifier</h3>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/:modifier_slug/:modifier_term&#39;</code></pre></div>
+
+<p>If a thread has had a modifier applied to it then it’s possible to request only the entries that fit that specific modifier. This works well for the collection type modifier. To request entries based on a modifier then you provide <code>:modifier_slug</code> with the name of the modifier and replace the <code>:modifier_term</code> with a term your looking for.</p>
+
+<p>Because this is so different from other resources I’ve provided an example below. </p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&#39;http://api.getbraid.io/api/delivery/v1/entries/tags/javascript/?threadId=554a818f6eda17d33587e567<span class="err">&amp;</span>exclude=data.thumbnails&#39;</code></pre></div>
+
+<p>You can see that in this request we’re using a little bit of everything. We’re using resource urls and query parameters to find all entries that have a <code>modifier_slug</code> called ‘tags’ and that if any have a <code>modifier_term</code> matching ‘javascript’ in a specific thread based on the <code>threadId</code>.</p>
+
+<p>Lucky for us we managed to find one that did match our term ‘javascript’.</p>
+
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+	<span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;554b7c7f0f9c288477c26780&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;_braidId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a8034dfd1a2521ce4a179&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;_threadId&quot;</span><span class="p">:</span> <span class="s2">&quot;554a818f6eda17d33587e567&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;youtube&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+		<span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;In this Javascript tutorial for beginners, we&#39;re going to be using Javascript selectors to access the DOM (document object model) and interact with our webpage in realtime. Selectors allow us to search for elements in the web page, get those html elements, and do things with them.\ \ Selector methods are:\ document.getElementsByTagName(&#39;div&#39;)\ document.getElementsByClassName(&#39;done&#39;)\ document.getElementById(&#39;my-id&#39;)\ document.querySelector(&#39;#my-id&#39;)\ document.querySelectorAll(&#39;.classname&#39;)\ \ Once you have selected an html element, you can modify it:\ document.getElementById(&#39;my-id&#39;).innerHTML = \&quot;new html\&quot;\ document.getElementById(&#39;my-id&#39;).className = \&quot;newclass otherclass\&quot;\ \ Hopefully you liked this javascript tutorial for beginners with examples (hopefully you like every web development tutorial I crank out)\ As you can see, selectors are powerful in Javascript and even if you&#39;re a javascript beginner, you can make any and every change to your web page.&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Javascript Selectors - Javascript Tutorial for Beginners With Examples&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;playlistId&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+		<span class="nt">&quot;channelTitle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+		<span class="nt">&quot;channelId&quot;</span><span class="p">:</span> <span class="s2">&quot;UCVTlvUkGslCV_h-nSAId8Sw&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;publishedAt&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-04-21T15:59:01.000Z&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;videoId&quot;</span><span class="p">:</span> <span class="s2">&quot;W3EK4MlZW4g&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUZQHUkVFzQXUU3Y2iQZTSCVX9Yml5XHN1&quot;</span>
+	<span class="p">},</span>
+	<span class="nt">&quot;modifiers&quot;</span><span class="p">:</span> <span class="p">{</span>
+		<span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{</span>
+		<span class="nt">&quot;_modId&quot;</span><span class="p">:</span> <span class="s2">&quot;553d63a24e31e84061cf923c&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;slug_singular&quot;</span><span class="p">:</span> <span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[</span>
+			<span class="s2">&quot;javascript&quot;</span>
+			<span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">},</span>
+	<span class="nt">&quot;__v&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+	<span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span></code></pre></div>
+
+<h2 id="finished">Finished</h2>
+
+<p>Thats all there is at the moment for the Braid Delivery API, If you’d like to see it in use then make sure to click <a href="">examples</a> at the top. If your interesting in how to manage content in Braid then be sure to checkout the <a href="/management-api.html">Management API</a>.</p>
+
+        </div>
+      </div>
+    </div>
+
+    <footer>
+  <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var sidebar = $('.sidebar');
+    var header = $('.header');
+    var $window = $(window);
+
+    $window.scroll(function(){
+      if ($window.scrollTop() >= header.innerHeight()) {
+        sidebar.addClass('fixed');
+      } else {
+        sidebar.removeClass('fixed');
+      }
+    });
+  });
+  </script>
+</footer>
+
+
+  </body>
+
+</html>

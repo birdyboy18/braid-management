@@ -3,11 +3,6 @@ var express = require('express'),
     auth = require('../controllers/auth');
     path = require('path');
 
-
-router.get('/', auth.clientIsAuthenticated(), function(req, res){
-    res.send("You made it to the admin area");
-});
-
 router.post('/logout', function(req,res){
     req.logOut();
     res.redirect('/login');

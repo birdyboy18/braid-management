@@ -8,13 +8,16 @@ var loginRoutes = require('./routes/loginRoutes.js');
 var adminRoutes = require('./routes/adminRoutes.js');
 var serveStatic = require('serve-static');
 var path = require('path');
+var auth = require('./controllers/auth');
 
 module.exports.init = function(app) {
   app.use('/api/mangement/v1/', mangementApiv1);
   app.use('/email/', emailRoutes);
   app.use('/', loginRoutes);
   app.use('/admin', adminRoutes);
+  app.use('/admin', auth.clientIsAuthenticated(), serveStatic(path.join(__dirname, '/views/admin/')));
   //serve up any files in the public folder
   app.use('/public/', serveStatic(path.join(__dirname, '/public/')));
   app.use('/', serveStatic(path.join(__dirname, '/_site/')));
+  app.use('/docs', serveStatic(path.join(__dirname, '/views/docs/')));
 }
