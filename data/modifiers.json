@@ -1,0 +1,1 @@
+{ "_id" : { "$oid" : "55528ccc3ca4ed3c3892f2cb" }, "_userId" : "demo", "type" : "collection", "name" : "tags", "description" : "Used to tag entries with similar content", "modifier_meta" : { "terms" : [ "javascript", "fundamentals", "angularjs", "grunt", "nodejs", "docker" ], "slug" : "tags" }, "threads" : [ { "$oid" : "55528c2e3ca4ed3c3892f298" } ], "__v" : 1 }

@@ -1,0 +1,1 @@
+{ "_id" : { "$oid" : "55528bb93ca4ed3c3892f297" }, "_userId" : "demo", "name" : "Demo Braid", "description" : "A new demo braid", "threads" : [ { "$oid" : "55528c2e3ca4ed3c3892f298" } ], "created" : { "$date" : "2015-05-13T00:24:41.953+0100" }, "last_modified" : { "$date" : "2015-05-13T00:24:41.953+0100" }, "__v" : 1 }
