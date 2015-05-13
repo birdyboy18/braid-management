@@ -48,6 +48,6 @@ router.put('/remove/modifier/:mod_id/from/thread/:thread_id', auth.isAuthenticat
 
 //Entries Routes
 router.get('/entries/', auth.isAuthenticated, auth.isAuthorized(), entry.list);
-router.put('/entries/:entry_id', auth.isAuthenticated, auth.isAuthorized(), entry.update);
+router.put('/entries/:entry_id', auth.isAuthenticated, entry.update);
 
 module.exports = router;
