@@ -35,12 +35,15 @@ module.exports = function() {
     });
   },
 
+  /*
+    Checks to see if a thread actually needs scraping based on the time since it was last scraped. Default at 15 mintues
+  */
   scraper.threadNeedsScraping = function(thread) {
     var min = 1000*60;
     var now = new Date();
     var timeSinceChecked = Math.ceil((now.getTime() - thread.last_checked.getTime())/min);
 
-    if (timeSinceChecked > .5 && thread.active === true) {
+    if (timeSinceChecked > 15 && thread.active === true) {
       console.log("needs to be scraped, last scraped was " + timeSinceChecked + " mins ago");
       return true;
     } else {
@@ -49,6 +52,10 @@ module.exports = function() {
     }
   },
 
+  /*
+    Scrape all the threads that are passed as a parameter, now is a boolean, 
+    it bypasses the needscraping useful for when a new thread is created
+  */
   scraper.scrapeThreads = function(threads, now) {
     var now = now || false;
     threads.map(function(thread){
@@ -58,6 +65,10 @@ module.exports = function() {
     });
   },
 
+  /*
+    Actually scrapes the thread, checks what service and make the approriate service api calls.
+    Needs to be abstracted into it's own module really.
+  */
   scraper.scrapeThread = function(thread) {
     var key;
     var url;
@@ -134,7 +145,7 @@ module.exports = function() {
 
     });
   },
-
+  // Start the scraper, used once a succesful database connections has been made
   scraper.start = function() {
     scraper.getThreads(function(threads){
       scraper.threads = threads;

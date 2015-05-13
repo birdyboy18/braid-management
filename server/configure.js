@@ -17,15 +17,19 @@ var Email = require('../services/email.js');
 var cors = require('cors');
 
 module.exports = function(app) {
+  //allows cross origin requests
   app.use(cors());
   app.use(logger('dev'));
+  //used to parse json requests to the api
   app.use(bodyParser.json());
+  //used to parse x-www-form-urlencoded requests to the api
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(methodOverride());
   app.use(expressSession({ secret: 'uni work sucks', resave: false, saveUninitialized: false}));
   //init passport for authentication
   app.use(passport.initialize());
+  //allow the use of sessions
   app.use(passport.session());
 
   //init the routes

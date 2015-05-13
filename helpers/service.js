@@ -1,3 +1,6 @@
+/*
+It used to return the correct service-meta data when creating a new thread resource.
+*/
 var Service = require('../models/service_schemas');
 
 var service = {

@@ -30,11 +30,14 @@ var braid = {
       newBraid.save(function(err, braid){
         if (err) { throw err;};
 
+        //when saving the new braid find the user and add a reference to the braid in the users braids property
         Models.User.findOne({ username: braid._userId},'-__V -password', function(err, user){
           if (err) { throw err;};
 
+          //push the id in
           user.braids.push(braid._id);
 
+          //now we're done so let the user know.
           user.save(function(err, user){
             if (err) { throw err;};
 
@@ -47,6 +50,7 @@ var braid = {
         })
       });
   },
+  //this handy function lets you pass the req body and then will just add the changes
   update: function(req,res) {
     Models.Braid.findOneAndUpdate({ _id: req.braidId }, req.body, function(err, braid){
       if (err) { throw err;};

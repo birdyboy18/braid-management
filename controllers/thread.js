@@ -27,7 +27,7 @@ var thread = {
     } else {
       userId = req.user.username;
     }
-
+    //A braidId is require so check to make sure they did, if not tell them off!
     var braidId;
     if (req.query.braidId) {
       braidId = req.query.braidId;
@@ -35,8 +35,10 @@ var thread = {
       return res.json('You haven\'t supplied a braidId to assign the new thread too');
     }
 
+    //decide on what meta should be attach, simply return the schema based on the two parameters supplied
     var service_meta = Service.serviceDecider(req.body.service, req.body.username);
 
+    //it's then save to the service_meta property
     var newThread = new Models.Thread({
       _id: new mongoose.Types.ObjectId,
       _braidId: braidId,
@@ -54,6 +56,7 @@ var thread = {
       Models.Braid.findOne({ _id: braidId }, function(err, braid){
         if (err) { throw err;};
 
+        //when we save the thread we want to store a reference to the braid it was created in.
         braid.threads.push(thread._id);
 
         braid.save(function(err, braid){
@@ -138,6 +141,9 @@ var thread = {
       }
     });
   },
+  /*
+  This shouldn't really be here it's left over from testing.
+  */
   listEntries: function(req, res) {
     Models.Entry.find({ _threadId: req.params.thread_id}, function(err, entries){
       if (err) { throw err;};
@@ -145,6 +151,7 @@ var thread = {
       res.status(200).json(entries);
     });
   },
+  //Attach a modifier, check if both the thread and modifier exists
   attachModifier: function(req, res) {
       Models.Thread.findOne({ _id: req.params.thread_id }, function(err, thread) {
         if (err) { throw err;};
@@ -156,14 +163,14 @@ var thread = {
 
           if (mod) {
             //then it exists
-
+            //store references to one another
             mod.threads.push(thread._id);
             thread.modifiers.push(mod._id);
 
             mod.save();
             thread.save(function(err, thread){
               if (err) { throw err;};
-
+              //pass the thread and mod to the entry modifier where each one will have the meta data copied to each entry.
               EntryModifier.applyModifiers(thread, mod);
             });
             res.status(200).json({
@@ -184,6 +191,9 @@ var thread = {
     }
   });
   },
+  /*
+    This does literally the same as the above but removes the modifier from all the entrues instead.
+  */
   removeModifier: function(req, res) {
       Models.Thread.findOne({ _id: req.params.thread_id }, function(err, thread) {
         if (err) { throw err;};

@@ -12,15 +12,10 @@ var entryModifier = {
     Models.Entry.find( { _threadId: thread._id}, function(err, entries){
       if (err) { throw err;};
 
-      function getAllMethods(object) {
-        return Object.getOwnPropertyNames(object).filter(function(property) {
-            return typeof object[property] == 'function';
-        });
-    }
-
       if (entries.length > 0) {
         //we have entries
 
+        //loop through every entry
         entries.map(function(entry){
           if (entry.modifiers[mod.modifier_meta.slug]) {
             //don't add it it exists
@@ -32,13 +27,12 @@ var entryModifier = {
               slug: mod.modifier_meta.slug,
               slug_singular: mod.modifier_meta.slug_singular
             }
+            //returns a empty modifer based on the type of modifier, it's decided by the modiferentryDecider
             entry.modifiers[mod.modifier_meta.slug] = Modifier.entryDecider(options);
             entry.markModified('modifiers');
-            
+            //save the new data added to the entry
             entry.save(function(err, Entry){
               if (err) { throw err;};
-
-              //console.log('Modifier has sucesfully be applied to entry');
             });
           }
 
@@ -55,13 +49,15 @@ var entryModifier = {
       if (entries.length > 0) {
         //we have entries
 
+        //loop through the entries
         entries.map(function(entry){
-
+        //if the slug of the modifier matches then delete the entire object
         if (entry.modifiers[mod.modifier_meta.slug]) {
           delete entry.modifiers[mod.modifier_meta.slug];
           entry.markModified('modifiers');
         }          
 
+        //then save
         entry.save(function(err, entry){
           if (err) { throw err;};
             console.log('Modifier has sucesfully been removed from the entry');
@@ -76,13 +72,3 @@ var entryModifier = {
 }
 
 module.exports = entryModifier;
-
-
-function toRemove(entry, mod, cb) {
-  var toRemove = [];
-
-  //loop through every modifier and if the mod_id matches remove that entry.
-  //console.log(entry.modifiers.length);
-
-  cb(toRemove);
-}

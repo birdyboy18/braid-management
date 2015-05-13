@@ -1,3 +1,9 @@
+/*
+This is used by the entries and modifiers during their creation 
+to look up and return the correct modifier meta. 
+Using a module make for mor elegant code.
+It's used both by modifiers and entries, hence the apprrpriate naming
+*/
 var Modifier = require('../models/modifier_schemas');
 
 var modifier = {

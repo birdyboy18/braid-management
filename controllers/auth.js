@@ -4,6 +4,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var Models = require('../models/');
 var _ = require('lodash');
 
+/*
+This passport method used a basic strategy. It accepts the username and password, 
+this will be called as middleware on an routes that need authenticating.
+Uses basic auth, used on 99% of the routes on this server.
+*/
 passport.use(new BasicStrategy(function(username, password, cb) {
   Models.User.findOne({ username: username}, function(err, user){
     if (err) {return cb(err)};
@@ -24,6 +29,9 @@ passport.use(new BasicStrategy(function(username, password, cb) {
   });
 }));
 
+/*
+  Similar to the above method but is local meaning it will accept the username and password from a form instead of basic auth
+*/
 passport.use(new LocalStrategy(function(username, password, cb){
   Models.User.findOne({ username: username }, function(err, user){
     if (err) { return cb(err);};
@@ -44,6 +52,10 @@ passport.use(new LocalStrategy(function(username, password, cb){
   });
 }));
 
+/*
+passport by default expects a user id to be a number,
+this database is set up differently so provide the actual way it should serialize and desrialize a user for a session.
+*/
 passport.serializeUser(function(user, cb){
   cb(null, user.username);
 });
@@ -56,6 +68,11 @@ passport.deserializeUser(function(user, cb){
   })
 });
 
+/*
+Custom written authorisation middleware, needs work. 
+It essentiallly makes sure the user has the right to access a resource that either 
+belongs to them or is the correct role level
+*/
 var auth = {
   restrictTo: function(role) {
     return function(req, res, next) {

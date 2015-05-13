@@ -14,6 +14,7 @@ var data = {
 */
 
 var email = {
+  //sends any data i pass it in an email using mailgun and then tells me when it's done via callback
   send: function(data, callback) {
 
     mailgun.messages().send(data, function(err, body){
@@ -22,11 +23,15 @@ var email = {
       callback(null,body);
     });
   },
+  /*allows me to make custom emails by passing it data and an email template
+  it returns the fully rendered template back read to be sent
+  */
   renderTemplate: function(file, data, cb) {
     var template = fs.readFileSync(file, 'utf-8');
     var email = hogan.compile(template);
     cb(email.render(data));
   },
+  //finds the verification token belonging to the user who just signed up and if it hasn't expired and the url matches verifies them.
   verifyUser: function(token, cb) {
     Models.VerificationToken.findOne({ token: token}, function(err, token){
       if (err) { cb(err);};

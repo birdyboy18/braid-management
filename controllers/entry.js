@@ -25,6 +25,7 @@ var entry = {
         //Time to update it.
         _.extend(entry, req.body);
 
+        //if in the case the user is trying to update the modifier terms
         if (req.body.modifier_slug && req.body.modifier_term) {
           //get the modifier id
           var mod_id = entry.modifiers[req.body.modifier_slug]._modId;
