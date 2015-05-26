@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>How To Make Youtube Videos Filterable Via Custom Tags</title>
+  <meta name="description" content="This guide is going to cover a few things. Firstly it’s going to show you how to setup things making it possible to query a thread of entries based on a spec...">
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="canonical" href="http://getbraid.io/2015/05/26/How-to-make-YouTube-Videos-filterable-via-custom-tags.html">
+  <link rel="alternate" type="application/rss+xml" title="Braid.io - Modify, Manage and Expose all your data from one place." href="http://getbraid.io/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="header background--green">
+  <div class="container">
+    <a href="/community" class="logo left">
+      <img src="/assets/images/logo@2x.png" alt="braid.io logo">
+    </a>
+    <nav class="nav right">
+      <ul>
+        
+        
+        <li><a  href="/community">Community</a></li>
+        
+        
+        <li><a  href="/docs">Docs</a></li>
+        
+        
+        <li><a  href="/login">Log in</a></li>
+        
+        <li><a class="btn btn--orange no-hover js-sign-up" href="#">Sign Up</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- Sign up overlay -->
+<div class="message-bar">
+  <p class="js-message">User succesfully created</p>
+</div>
+<div class="modal modal--signup">
+  <h4 class="h4 text--grey align-center">Sign Up</h4>
+  <form class="form js-signup-form">
+    <div class="input-group">
+      <label for="">Username</label>
+      <input type="text" name="username" class="js-form-username">
+    </div>
+    <div class="input-group">
+      <div class="input-group half inline-block">
+        <label for="">First Name</label>
+        <input type="text" name="firstname" class="js-form-firstname">
+      </div><div class="input-group half inline-block">
+        <label for="">Last name</label>
+        <input type="text" name="lastname" class="js-form-lastname">
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="">Email</label>
+      <input type="text" name="email" class="js-form-email">
+    </div>
+    <div class="input-group">
+      <label for="">Password</label>
+      <input type="password" name="password" class="js-form-password">
+    </div>
+    <input type="submit" value="Sign Up">
+  </form>
+</div>
+<div class="overlay"></div>
+    <div class="container post">
+      
+      <img src="/assets/images/youtube-filterable-videos-cover.png">
+      
+      <h1>How To Make Youtube Videos Filterable Via Custom Tags</h1>
+      <div class="post-meta">
+        <div class="by-line inline">
+          <p>by Paul Bird</p>
+        </div>
+        
+        <div class="tags inline">
+          <p> Posted in
+          
+          <span>youtube,</span>
+          
+          <span>javascript</span>
+          
+          </p>
+        </div>
+        
+        <div class="date inline">
+          <p>26 May 2015</p>
+        </div>
+      </div>
+      <p>This guide is going to cover a few things. Firstly it’s going to show you how to setup things making it possible to query a thread of entries based on a specified modifier slug. Then it will show you how to use the API to query and use the API to make something useful. The first half will be easier if you use the free chrome app called postman, which is perfect for testing and sending requests to APIs.</p>
+
+<p>The tutorial will be written using javascript using Facebook’s UI library reactjs and a library built around their flux architecture using Reflux. For brevity I will  assume you have a working knowledge of reactjs as this guide really only focuses on how to use the API to make changes and fetch results. That said reactjs is written in a way that you know what each part of the code does in most cases.</p>
+
+<p>If you have a prefered front-end framework then feel free to use that, but know the examples will be using react.</p>
+
+<p>If you want to follow along and make your own example then remember you can sign up for free. Use the API to place some data into some threads and braids. Then make your own filterable video feed. However you can also easily use the credentials and data in this example app if you just want to have a play.</p>
+
+<p>If at any moment something to do with the API doesn’t seem clear then please look over the documentation for the APIs.</p>
+
+<h4 id="setting-up-braid">Setting up Braid</h4>
+
+<p><em>*This setup part isn’t necessary for the tutorial, only if you want to use your own credentials and own thread. Feel free to skip it and use the thread and credentials provided in the code example throughout the tutorial.</em></p>
+
+<p>Once you’ve signed up to braid, and your user was successfully created you’re able to start using the API using the credentials you supplied when making your account immediately. You’ll need these to provide Basic Auth when creating new resources.</p>
+
+<p>First we want to make a braid where we can store threads of content. This can be done by easily sending a post request to the following API endpoint. Remember to use postman, it makes it super easy.</p>
+
+<p><code> GET 'http://getbraid.io/api/management/v1/braid'</code></p>
+
+<p>All you need to do is make sure your request contains a name parameter and a description parameter. After that your returned the newly created braid. Cool now make sure you copy the _id as you’ll need it when creating a thread.</p>
+
+<p><img src="/assets/images/making-a-braid.png" alt="'Making a braid using postman'" /></p>
+
+<h4 id="creating-a-thread">Creating a thread</h4>
+
+<p>When you create a thread a braidId must absolutely be supplied otherwise you won’t be allowed to create it. You also need to make sure that when you send over the post request you also provide a name, description, service and a username.</p>
+
+<p>In our case we want to create a thread and make sure we send over the data as follows.</p>
+
+<p><img src="/assets/images/making-a-thread.png" alt="'Making a thread using postman'" /></p>
+
+<p>Again the system will return the newly created resource. In this case the thread. Make a copy of the _id of the thread, we’ll going to need it later.</p>
+
+<p>Once a thread is created, provided the channel username you supplied was correct, the system will automatically scrape and make a copy of each entry and place it inside the thread’s entries array. You could check this by quickly using the API endpoint</p>
+
+<p><code> GET 'http://api.getbraid.io/api/delivery/v1/thread/:thread_Id'</code></p>
+
+<p>If it’s empty maybe it didn’t work. The channel username doesn’t exist, or it had no entries. If this does happen, your best bet is to delete the thread and remake it again. Refer to the documentation for deleting a thread.</p>
+
+<h4 id="creating-a-modifier">Creating a modifier</h4>
+
+<p>Now we need to create a modifier, again we’ll going to need to make a post request. This time to the API endpoint of the following.</p>
+
+<p><code> POST 'http://getbraid.io/api/management/v1/modifier/'</code></p>
+
+<p>It will need to know the following things. the type of modifier, in this case collection. The name of the modifier, the slug, and the singular version of the slug.</p>
+
+<p><img src="/assets/images/making-a-modifier.png" alt="'Making a modifier using postman'" /></p>
+
+<p>After you’ll receive the newly created modifier. Make a note of the _id we’re going to need it for the next part.</p>
+
+<h4 id="attaching-a-modifier-to-a-thread">Attaching a modifier to a thread</h4>
+
+<p>The next part is cool. This is where we attach our newly created modifier to a thread. It will then in turn attach an empty modifier of that type to every entry in that thread.</p>
+
+<p>To do this you’ll need both the threadId and the modifierId. You’ll then attach them by sending a PUT request to the following API base, replacing :variable with the appropriate _id</p>
+
+<p><code>PUT'http://getbraid.io/api/management/v1/attach/modifier/:modifier_id/to/thread/:thread_id'</code></p>
+
+<p>The API should tell you it was successful. Now every entry in that thread should have a modifier in its modifier object based on the slug you gave it.</p>
+
+<h4 id="set-up-done">Set up done</h4>
+
+<p>Thats the creation of the necessary resources needed. However you now have a thread of data based on a youtube username and will shortly be able to modify and query it using the API. All you needed to do was sign up make a few requests and provide a channel username, much less work than if you’d  done all of that yourself.</p>
+
+<p>All of this knowledge is available in the documentation. However it doesn’t hurt to actually see it being done using a REST API Client such as postman.</p>
+
+<p>It’s now time to query the API and get our react app displaying the videos from our chosen thread.</p>
+
+<h4 id="grabbing-the-videos-from-a-thread">Grabbing the videos from a thread</h4>
+
+<p>To start we are going to need a way of grabbing the videos / entries. Luckily we can do this easily using the delivery API and providing the threadId parameter in the query string.</p>
+
+<p>the base url for grabbing entries is as follows.</p>
+
+<p><code> GET 'http://api.getbraid.io/api/delivery/v1/entries/'</code></p>
+
+<p>Now we just add the threadId parameter</p>
+
+<p><code> GET 'http://api.getbraid.io/api/delivery/v1/entries/?threadId=55528c2e3ca4ed3c3892f298'</code></p>
+
+<p>If you visit the link above you’ll be given around 50 entries from that thread. But it does mean we can easily request data. To make it easier the API gives you the ability to limit how many results come in per a request. lets do that.</p>
+
+<p><code> GET 'http://api.getbraid.io/api/delivery/v1/entries/?threadId=55528c2e3ca4ed3c3892f298&amp;limit=20'</code></p>
+
+<p>Now we get around 20 thats a good amount. If you can’t tell quickly change limit to 1 in the url and then you’ll see that we really are limiting the amount of data. This is good it means that we’re not being given unwanted data.</p>
+
+<h4 id="doing-the-same-in-javascript">Doing the same in javascript</h4>
+
+<p>Now we know how to request the data, we just need to do the same in javascript. I’m going to be using an AJAX library called Superagent. However feel free to use whichever javascript library you like, such as jQuery’s popular AJAX method.</p>
+
+<p>This code sample is taken from the actual example app, that is available here. The important part here is the request part. you can see the same code being used in two places, one when we initialise the store and again being used in a function called _fetchVideos.</p>
+
+<p><em>*.use is a variable that prefixes all the requests with the base delviery api, it simply makes the request url smaller for asethetics and consistency</em></p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_tags</span> <span class="o">=</span> <span class="p">[];</span>
+		
+		<span class="nx">request</span>
+		<span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/modifier/55528ccc3ca4ed3c3892f2cb&#39;</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">delivery</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">modifier_meta</span><span class="p">.</span><span class="nx">terms</span><span class="p">;</span>
+				<span class="nx">self</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">});</span>
+
+		<span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="nx">Actions</span><span class="p">.</span><span class="nx">addTag</span><span class="p">,</span> <span class="s1">&#39;_handleAddTag&#39;</span><span class="p">);</span>
+
+	<span class="p">}</span></code></pre></div>
+
+<p>As you should be able to see, we chain parts of our request up, once the request is done and it was an okay response. We then set the videos array full with the videos we just fetch from the API. We then tell the Reflux store to send out that data to all UI components that are listening to the store.</p>
+
+<h4 id="listing-the-videos">Listing the videos</h4>
+
+<p>Now that we can actually grab the video data, we need to somehow get them onto a page. We can do this by passing this data to all the required react components. If you look at the component for videoList. You can see that it quite simply maps through the data passed to it as a property and then renders a new video component. While it is possible to do this in one component it wouldn’t make sense since really it should be two components, especially if we want to adhere to the single responsibility principle.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;react&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">Video</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./video.jsx&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">videoList</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+	<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">videos</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">videos</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">video</span><span class="p">){</span>
+			<span class="k">return</span> <span class="o">&lt;</span><span class="nx">Video</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">video</span><span class="p">.</span><span class="nx">_id</span><span class="p">}</span> <span class="nx">id</span><span class="o">=</span><span class="p">{</span><span class="nx">video</span><span class="p">.</span><span class="nx">_id</span><span class="p">}</span> <span class="nx">video</span><span class="o">=</span><span class="p">{</span><span class="nx">video</span><span class="p">}</span> <span class="o">/&gt;</span>
+		<span class="p">});</span>
+		<span class="k">return</span> <span class="p">(</span>
+			<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s1">&#39;video-list&#39;</span><span class="o">&gt;</span>
+				<span class="p">{</span><span class="nx">videos</span><span class="p">}</span>
+			<span class="o">&lt;</span><span class="err">/div&gt;</span>
+		<span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">videoList</span><span class="p">;</span></code></pre></div>
+
+<h4 id="the-video-component">The Video Component</h4>
+
+<p>You can see that also there is a video component that we simply pass the data down along to. We’ll be able to access this through that components props the same as how video list does.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;react&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">Actions</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../actions/actions.js&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+	<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">tags</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">video</span><span class="p">.</span><span class="nx">modifiers</span><span class="p">.</span><span class="nx">tags</span><span class="p">.</span><span class="nx">terms</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">term</span><span class="p">){</span>
+			<span class="k">return</span> <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">filterByTag</span><span class="p">}</span> <span class="o">&gt;</span><span class="p">{</span><span class="nx">term</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/span&gt;</span>
+		<span class="p">})</span>
+		<span class="k">return</span> <span class="p">(</span>
+			<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="o">&gt;</span>
+				<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;thumbnail&quot;</span><span class="o">&gt;</span>
+					<span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">video</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">thumbnails</span><span class="p">.</span><span class="nx">standard</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span><span class="o">/&gt;</span>
+				<span class="o">&lt;</span><span class="err">/div&gt;</span>
+				<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;videoDetails&quot;</span><span class="o">&gt;</span>
+					<span class="o">&lt;</span><span class="nx">p</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;videoTitle&quot;</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">video</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">title</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+					<span class="o">&lt;</span><span class="nx">p</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="o">&gt;</span><span class="nx">_id</span><span class="o">:</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">video</span><span class="p">.</span><span class="nx">_id</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+					<span class="o">&lt;</span><span class="nx">p</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="o">&gt;</span><span class="nx">Tags</span><span class="o">:</span> <span class="p">{</span><span class="nx">tags</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+				<span class="o">&lt;</span><span class="err">/div&gt;</span>
+			<span class="o">&lt;</span><span class="err">/div&gt;</span>
+		<span class="p">)</span>
+	<span class="p">},</span>
+	<span class="nx">filterByTag</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">Actions</span><span class="p">.</span><span class="nx">filterVideos</span><span class="p">({</span><span class="nx">tag</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">tag</span><span class="p">});</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">video</span><span class="p">;</span></code></pre></div>
+
+<p>Despite some react and reflux specifics it’s easy to see how the data is dynamically inserted. This is for a single component based on the data passed. This is happening in videoList earlier. Now we end up with a result that will hopefully look something a bit like this (with additional CSS styling).</p>
+
+<p><img src="/assets/images/youtube-example-videolist.png" alt="'Videos from the thread in the browser'" /></p>
+
+<p>Cool, now we have all of the results in the browser from the API for a specific thread. Next we need to make it so that we can add a tag to a specific video.</p>
+
+<p><em>*In the screenshot above the work for adding tags to videos was already done, don’t worry this guide will still tell you how to add a tags modifier using the management API.</em></p>
+
+<h4 id="adding-a-tag-to-a-video">Adding a tag to a video</h4>
+
+<p>In order to add a tag to a video, we simply need to send a PUT specifying the modifier we want to update based on it’s slug and the term we want to apply. This is done by providing the value of tags to modifier_slug and the tag we want to apply to modifier_term. In postman this is easy. But we want to be able to do it in react.</p>
+
+<p><img src="/assets/images/attaching-modifier-to-thread.png" alt="'Attaching a modifier to a thread in postman'" /></p>
+
+<p>First we need a way of doing this. For quickness the example provides a form that will take the id of the video and the term we want to apply. We already know it’s for tags so that part doesn’t need to be dynamic. This will make it easy to grab the data from the form and then send it over to the addTag actions which will build up the request and then submit it for us using our credentials.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;react&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">Actions</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../actions/actions.js&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">tagForm</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+	<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="p">(</span>
+			<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;tag-form&quot;</span><span class="o">&gt;</span>
+				<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;input-group&quot;</span><span class="o">&gt;</span>
+					<span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">_id</span><span class="o">:</span> <span class="o">&lt;</span><span class="err">/label&gt;</span>
+					<span class="o">&lt;</span><span class="nx">input</span> <span class="nx">ref</span><span class="o">=</span><span class="s1">&#39;entryInput&#39;</span> <span class="o">/&gt;</span>
+				<span class="o">&lt;</span><span class="err">/div&gt;</span>
+				<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;input-group&quot;</span><span class="o">&gt;</span>
+					<span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Tag</span><span class="o">:</span> <span class="o">&lt;</span><span class="err">/label&gt;</span>
+					<span class="o">&lt;</span><span class="nx">input</span> <span class="nx">ref</span><span class="o">=</span><span class="s1">&#39;tagInput&#39;</span> <span class="o">/&gt;</span>
+				<span class="o">&lt;</span><span class="err">/div&gt;</span>
+				<span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">_addTag</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">Add</span> <span class="nx">Tag</span><span class="o">&lt;</span><span class="err">/span&gt;</span>
+			<span class="o">&lt;</span><span class="err">/div&gt;</span>
+		<span class="p">)</span>
+	<span class="p">},</span>
+	<span class="nx">_addTag</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="kd">var</span> <span class="nx">entry</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">entryInput</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+		<span class="kd">var</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">tagInput</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+		<span class="nx">Actions</span><span class="p">.</span><span class="nx">addTag</span><span class="p">({</span> <span class="nx">entry</span><span class="o">:</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">tag</span><span class="o">:</span> <span class="nx">tag</span><span class="p">});</span>
+		<span class="nx">React</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">entryInput</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+		<span class="nx">React</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">tagInput</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">tagForm</span><span class="p">;</span></code></pre></div>
+
+<p>Here the _addTag function grabs the value of the inputs and then simply sends it over to the actions to tell the tagsStore to make a PUT request. Which you can see here</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">_handleAddTag</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+		<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/entries/&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">entry</span><span class="p">;</span>
+		<span class="kd">var</span> <span class="nx">tag</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="nx">modifier_slug</span><span class="o">:</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span>
+			<span class="nx">modifier_term</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">tag</span>
+		<span class="p">}</span>
+		<span class="nx">request</span>
+		<span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">,</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">management</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">tag</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">self</span><span class="p">.</span><span class="nx">_fetchTags</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">});</span>
+	<span class="p">}</span></code></pre></div>
+
+<p>This will send a request and then the new tag will be added to the video and also a global tags list. The global tags list as you may be able to guess lists all of the tags that have been applied to the videos. This is actually stored inside the terms of the modifier making it easy to keep track of what tags there are.</p>
+
+<p>You can see the form and the global tags list here.</p>
+
+<p><img src="/assets/images/youtube-example-list-and-tags.png" alt="'Videos now have tags and there is a global tags list'" /></p>
+
+<p>Now we can add tags, all we need to be able to do is make it so that we can filter based on a tag. We’ll do this by creating a filterVideo function in our videoStore that will use the API endpoint made specifically for entries that have a modifier type of collection applied.</p>
+
+<p>To filter based on a term in a collection modifier all you need to do is provide the modifiers slug and the term you want to search by.</p>
+
+<p><code>GET 'http://api.getbraid.io/api/delivery/v1/entries/:modifier_slug/:modifer_term?threadId=:threadId'</code></p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">_filterVideos</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+		<span class="kd">var</span> <span class="nx">url</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span><span class="p">)</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/entries/tags/&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/entries&#39;</span><span class="p">;</span>
+		<span class="p">}</span>
+		
+		<span class="nx">request</span>
+		<span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">delivery</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+		<span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">threadId</span><span class="o">:</span> <span class="s1">&#39;55528c2e3ca4ed3c3892f298&#39;</span><span class="p">})</span>
+		<span class="p">.</span><span class="nx">query</span><span class="p">({</span> <span class="nx">limit</span><span class="o">:</span> <span class="mi">20</span> <span class="p">})</span>
+		<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">self</span><span class="p">.</span><span class="nx">_videos</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+				<span class="nx">self</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_videos</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">});</span>
+	<span class="p">}</span></code></pre></div>
+
+<p>All that is happening here is we are checking to see if a tag actually exists if it does then filter by them by using ‘/entries/tags/tagname’ if not then just grab all the entries. Now whenever we click a tag at the top the results will be filtered based on that tag.</p>
+
+<p><img src="/assets/images/youtube-example-filtered-videos.png" alt="'Videos now are filterable when a tag is clicked'" /></p>
+
+<h4 id="wrapping-up">Wrapping up</h4>
+
+<p>If you’ve been following along it’s now possible to add tags to youtube video and you can even search and filter by them really easily. I hope this makes you realise some of the awesome stuff that could be made with this. At the moment braid only supports youtube and a collection modifier. But the foundation is there to make other integrations and lots of other modifier types.</p>
+
+<p>I hope you’ve found this guide useful. This guide will be sitting in it’s own github repo so if you spot any problems then please feel free to submit an issue and i’ll fix it as soon as possible.</p>
+
+
+    </div>
+
+    <footer class="footer section--padded background--d_green">
+  <div class="container">
+    <div class="left third">
+      <h4 class="h4 text--white">Braid.io</h4>
+      <p class="text--white text--w_light">
+        Briad.io is brought to you by Paul Bird. Braid was Born and made out of frustration; I was that frustrated developer.
+      </p>
+    </div>
+    <div class="left half align-center">
+      <h4 class="h4 text--white">Don't forget to sign up!</h4>
+      <a href="#" class="btn btn--orange btn--big js-sign-up">Remember, it's free</a>
+    </div>
+  </div>
+  <div class="copyright full">
+    <div class="container">
+      <p class="left">&copy; 2015 Braid.io</p>
+      <ul class="footer-nav right">
+        <li>
+          <a href="/community">Community</a>
+          <a href="/docs">Docs</a>
+          <a href="/login">Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<!-- Include scripts -->
+<script src="http://getbraid.io/js/bower_components/cash/dist/cash.min.js"></script>
+<script src="http://getbraid.io/js/ajax.js"></script>
+<script src="http://getbraid.io/js/main.js"></script>
+
+
+  </body>
+
+</html>
